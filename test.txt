@@ -1,0 +1,12 @@
+
+
+int main3() {
+    printf("Hello, World!\n");
+    test();
+    return 0;
+}
+int main2() {
+    printf("Hello, World!\n");
+    test();
+    return 0;
+}

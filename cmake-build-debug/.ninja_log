@@ -1,0 +1,14 @@
+# ninja log v5
+2	36	1714563604499565051	CMakeFiles/commom_lib.dir/c_scan_common.c.o	1a3f1b7d881e2d22
+1	33	1714563604495535232	CMakeFiles/c_scan_pro.dir/main.c.o	90e96a4474ae420f
+1	105	1714565249224263152	build.ninja	150639269e95e31b
+75	93	1714565188512601000	liblex_parser.a	c0339b96de8e4756
+0	4	0	clean	ad90e366ad70d77b
+68	87	1714563689369738000	libcommom_lib.a	c9c7b23db47c6ca4
+93	122	1714565188541015633	c_scan_pro	c8c8b62f060e95b9
+32	62	1714565188480543264	CMakeFiles/yacc_parser.dir/c_scan.tab.c.o	e3ea95c103da1c16
+62	80	1714565188499919000	libyacc_parser.a	d3668b3b3f1ead0d
+2	26	1714565166782338019	/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c	72d6709d21b1461e
+32	75	1714565188493960286	CMakeFiles/lex_parser.dir/lex.yy.c.o	8a76a6092ebfbb5d
+2	32	1714565188451496904	/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c	109b3b4a22838287
+2	32	1714565188451496904	/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.h	109b3b4a22838287
