@@ -1,12 +1,30 @@
 
+int main() {
+    //printf("Hello, World!\n");
+    read_file("../test.txt");
+    //test();
+    return 0;
+}
+int main ( char * t,char * m)  {
+    printf("Hello, World!\n");
+    test();
+}
+int main2()  {
+    printf("Hello, World!\n");
+    test();
 
-int main3() {
+}
+inline int main4() {
     printf("Hello, World!\n");
     test();
-    return 0;
 }
-int main2() {
-    printf("Hello, World!\n");
-    test();
-    return 0;
+//inline int main ( int (*funcp)(void),int (*funcp)(void)){}
+
+/*
+int
+add_values (x, y)
+    int x;int y;
+{
+  return x + y;
 }
+*/

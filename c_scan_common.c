@@ -4,7 +4,7 @@
 #include "c_scan_common.h"
 #include "stdio.h"
 #include "assert.h"
-extern FILE *yyin, *yyout;
+extern FILE *yyin;
 extern int yyparse();
 void test(void)
 {
@@ -20,7 +20,9 @@ void read_file(const char* path)
     }else{
         assert(0);
     }
+    do {
+        yyparse();
+    } while(!feof(fp));
 
-    yyparse();
     fclose(fp);
 }

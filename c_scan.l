@@ -1,9 +1,10 @@
 D			[0-9]
 L			[a-zA-Z_]
 H			[a-fA-F0-9]
-E			[Ee][+-]?{D}+
+E			([Ee][+-]?{D}+)
+P                       ([Pp][+-]?{D}+)
 FS			(f|F|l|L)
-IS			(u|U|l|L)*
+IS                      ((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))
 
 %{
 #include <stdio.h>
@@ -11,15 +12,20 @@ IS			(u|U|l|L)*
 void count();
 void comment();
 int yywrap(void);
+int check_type();
 %}
 
 %%
 "/*"			{ comment(); }
+"//"[^\n]*              { /* consume //-comment */ }
+
 
 "auto"			{ count(); return(AUTO); }
+"_Bool"			{ count(); return(BOOL); }
 "break"			{ count(); return(BREAK); }
 "case"			{ count(); return(CASE); }
 "char"			{ count(); return(CHAR); }
+"_Complex"		{ count(); return(COMPLEX); }
 "const"			{ count(); return(CONST); }
 "continue"		{ count(); return(CONTINUE); }
 "default"		{ count(); return(DEFAULT); }
@@ -32,9 +38,12 @@ int yywrap(void);
 "for"			{ count(); return(FOR); }
 "goto"			{ count(); return(GOTO); }
 "if"			{ count(); return(IF); }
+"_Imaginary"		{ count(); return(IMAGINARY); }
+"inline"		{ count(); return(INLINE); }
 "int"			{ count(); return(INT); }
 "long"			{ count(); return(LONG); }
 "register"		{ count(); return(REGISTER); }
+"restrict"		{ count(); return(RESTRICT); }
 "return"		{ count(); return(RETURN); }
 "short"			{ count(); return(SHORT); }
 "signed"		{ count(); return(SIGNED); }
@@ -49,18 +58,22 @@ int yywrap(void);
 "volatile"		{ count(); return(VOLATILE); }
 "while"			{ count(); return(WHILE); }
 
-{L}({L}|{D})*		{ count();  }
+{L}({L}|{D})*		{ count(); return(check_type()); }
 
 0[xX]{H}+{IS}?		{ count(); return(CONSTANT); }
-0{D}+{IS}?		{ count(); return(CONSTANT); }
-{D}+{IS}?		{ count(); return(CONSTANT); }
-L?'(\\.|[^\\'])+'	{ count(); return(CONSTANT); }
+0[0-7]*{IS}?		{ count(); return(CONSTANT); }
+[1-9]{D}*{IS}?		{ count(); return(CONSTANT); }
+L?'(\\.|[^\\'\n])+'	{ count(); return(CONSTANT); }
 
 {D}+{E}{FS}?		{ count(); return(CONSTANT); }
-{D}*"."{D}+({E})?{FS}?	{ count(); return(CONSTANT); }
-{D}+"."{D}*({E})?{FS}?	{ count(); return(CONSTANT); }
+{D}*"."{D}+{E}?{FS}?	{ count(); return(CONSTANT); }
+{D}+"."{D}*{E}?{FS}?	{ count(); return(CONSTANT); }
+0[xX]{H}+{P}{FS}?	{ count(); return(CONSTANT); }
+0[xX]{H}*"."{H}+{P}{FS}?     { count(); return(CONSTANT); }
+0[xX]{H}+"."{H}*{P}{FS}?     { count(); return(CONSTANT); }
 
-L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
+
+L?\"(\\.|[^\\"\n])*\"	{ count(); return(STRING_LITERAL); }
 
 "..."			{ count(); return(ELLIPSIS); }
 ">>="			{ count(); return(RIGHT_ASSIGN); }
@@ -110,7 +123,7 @@ L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
 "?"			{ count(); return('?'); }
 
 [ \t\v\n\f]		{ count(); }
-.			{ /* ignore bad characters */ }
+.			{ /* Add code to complain about unmatched characters */ }
 
 %%
 
@@ -138,8 +151,6 @@ loop:
 }
 
 
-
-
 int column = 0;
 
 void count()
@@ -152,9 +163,8 @@ void count()
 			column += 8 - (column % 8);
 		else
 			column++;
-    printf("++ %c",yytext[i]);
     fflush(stdout);
-	//ECHO;
+	ECHO;
 }
 
 

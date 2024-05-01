@@ -1,8 +1,19 @@
 %{
+#define YYERROR_VERBOSE 1
 int yylex();
 void yyerror(const char *s);
+#include <stdio.h>
+#include <assert.h>
+#include "c_scan_common.h"
 %}
 
+%union {
+	const char * file_name;
+	int lineno;
+	int columno;
+}
+
+%type <file_name> declarator
 
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
@@ -10,8 +21,9 @@ void yyerror(const char *s);
 %token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
 %token XOR_ASSIGN OR_ASSIGN TYPE_NAME
 
-%token TYPEDEF EXTERN STATIC AUTO REGISTER
+%token TYPEDEF EXTERN STATIC AUTO REGISTER INLINE RESTRICT
 %token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
+%token BOOL COMPLEX IMAGINARY
 %token STRUCT UNION ENUM ELLIPSIS
 
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
@@ -35,6 +47,8 @@ postfix_expression
 	| postfix_expression PTR_OP IDENTIFIER
 	| postfix_expression INC_OP
 	| postfix_expression DEC_OP
+	| '(' type_name ')' '{' initializer_list '}'
+	| '(' type_name ')' '{' initializer_list ',' '}'
 	;
 
 argument_expression_list
@@ -157,7 +171,7 @@ constant_expression
 	;
 
 declaration
-	: declaration_specifiers ';'
+	: declaration_specifiers ';' {printf("get 1")}
 	| declaration_specifiers init_declarator_list ';'
 	;
 
@@ -168,6 +182,8 @@ declaration_specifiers
 	| type_specifier declaration_specifiers
 	| type_qualifier
 	| type_qualifier declaration_specifiers
+	| function_specifier
+	| function_specifier declaration_specifiers
 	;
 
 init_declarator_list
@@ -198,6 +214,9 @@ type_specifier
 	| DOUBLE
 	| SIGNED
 	| UNSIGNED
+	| BOOL
+	| COMPLEX
+	| IMAGINARY
 	| struct_or_union_specifier
 	| enum_specifier
 	| TYPE_NAME
@@ -244,6 +263,8 @@ struct_declarator
 enum_specifier
 	: ENUM '{' enumerator_list '}'
 	| ENUM IDENTIFIER '{' enumerator_list '}'
+	| ENUM '{' enumerator_list ',' '}'
+	| ENUM IDENTIFIER '{' enumerator_list ',' '}'
 	| ENUM IDENTIFIER
 	;
 
@@ -259,7 +280,12 @@ enumerator
 
 type_qualifier
 	: CONST
+	| RESTRICT
 	| VOLATILE
+	;
+
+function_specifier
+	: INLINE
 	;
 
 declarator
@@ -267,10 +293,17 @@ declarator
 	| direct_declarator
 	;
 
+
 direct_declarator
 	: IDENTIFIER
 	| '(' declarator ')'
-	| direct_declarator '[' constant_expression ']'
+	| direct_declarator '[' type_qualifier_list assignment_expression ']'
+	| direct_declarator '[' type_qualifier_list ']'
+	| direct_declarator '[' assignment_expression ']'
+	| direct_declarator '[' STATIC type_qualifier_list assignment_expression ']'
+	| direct_declarator '[' type_qualifier_list STATIC assignment_expression ']'
+	| direct_declarator '[' type_qualifier_list '*' ']'
+	| direct_declarator '[' '*' ']'
 	| direct_declarator '[' ']'
 	| direct_declarator '(' parameter_type_list ')'
 	| direct_declarator '(' identifier_list ')'
@@ -325,9 +358,11 @@ abstract_declarator
 direct_abstract_declarator
 	: '(' abstract_declarator ')'
 	| '[' ']'
-	| '[' constant_expression ']'
+	| '[' assignment_expression ']'
 	| direct_abstract_declarator '[' ']'
-	| direct_abstract_declarator '[' constant_expression ']'
+	| direct_abstract_declarator '[' assignment_expression ']'
+	| '[' '*' ']'
+	| direct_abstract_declarator '[' '*' ']'
 	| '(' ')'
 	| '(' parameter_type_list ')'
 	| direct_abstract_declarator '(' ')'
@@ -342,7 +377,23 @@ initializer
 
 initializer_list
 	: initializer
+	| designation initializer
 	| initializer_list ',' initializer
+	| initializer_list ',' designation initializer
+	;
+
+designation
+	: designator_list '='
+	;
+
+designator_list
+	: designator
+	| designator_list designator
+	;
+
+designator
+	: '[' constant_expression ']'
+	| '.' IDENTIFIER
 	;
 
 statement
@@ -362,19 +413,17 @@ labeled_statement
 
 compound_statement
 	: '{' '}'
-	| '{' statement_list '}'
-	| '{' declaration_list '}'
-	| '{' declaration_list statement_list '}'
+	| '{' block_item_list '}'
 	;
 
-declaration_list
+block_item_list
+	: block_item
+	| block_item_list block_item
+	;
+
+block_item
 	: declaration
-	| declaration_list declaration
-	;
-
-statement_list
-	: statement
-	| statement_list statement
+	| statement
 	;
 
 expression_statement
@@ -393,6 +442,8 @@ iteration_statement
 	| DO statement WHILE '(' expression ')' ';'
 	| FOR '(' expression_statement expression_statement ')' statement
 	| FOR '(' expression_statement expression_statement expression ')' statement
+	| FOR '(' declaration expression_statement ')' statement
+	| FOR '(' declaration expression_statement expression ')' statement
 	;
 
 jump_statement
@@ -415,13 +466,31 @@ external_declaration
 
 function_definition
 	: declaration_specifiers declarator declaration_list compound_statement
+	{
+	/*
+	for origin c grammer,it like this, we do not advise use this way, so we assert!
+		int
+		add_values (x, y)
+		    int x;int y;
+		{
+		  return x + y;
+		}
+	*/
+	//sprintf();
+	assert(0);
+	}
 	| declaration_specifiers declarator compound_statement
-	| declarator declaration_list compound_statement
-	| declarator compound_statement
+	{
+
+
+	}
 	;
 
+declaration_list
+	: declaration
+	| declaration_list declaration
+	;
 %%
-#include <stdio.h>
 
 extern char* yytext;
 extern int column;
@@ -429,6 +498,6 @@ extern int column;
 void yyerror(const char *s)
 
 {
-	//fflush(stdout);
-	//printf("\n%*s\n%*s\n", column, "^", column, s);
+	fflush(stdout);
+	printf("\n%*s\n%*s\n", column, "^", column, s);
 }

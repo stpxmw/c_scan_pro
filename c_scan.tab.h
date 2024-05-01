@@ -70,33 +70,38 @@
      STATIC = 286,
      AUTO = 287,
      REGISTER = 288,
-     CHAR = 289,
-     SHORT = 290,
-     INT = 291,
-     LONG = 292,
-     SIGNED = 293,
-     UNSIGNED = 294,
-     FLOAT = 295,
-     DOUBLE = 296,
-     CONST = 297,
-     VOLATILE = 298,
-     VOID = 299,
-     STRUCT = 300,
-     UNION = 301,
-     ENUM = 302,
-     ELLIPSIS = 303,
-     CASE = 304,
-     DEFAULT = 305,
-     IF = 306,
-     ELSE = 307,
-     SWITCH = 308,
-     WHILE = 309,
-     DO = 310,
-     FOR = 311,
-     GOTO = 312,
-     CONTINUE = 313,
-     BREAK = 314,
-     RETURN = 315
+     INLINE = 289,
+     RESTRICT = 290,
+     CHAR = 291,
+     SHORT = 292,
+     INT = 293,
+     LONG = 294,
+     SIGNED = 295,
+     UNSIGNED = 296,
+     FLOAT = 297,
+     DOUBLE = 298,
+     CONST = 299,
+     VOLATILE = 300,
+     VOID = 301,
+     BOOL = 302,
+     COMPLEX = 303,
+     IMAGINARY = 304,
+     STRUCT = 305,
+     UNION = 306,
+     ENUM = 307,
+     ELLIPSIS = 308,
+     CASE = 309,
+     DEFAULT = 310,
+     IF = 311,
+     ELSE = 312,
+     SWITCH = 313,
+     WHILE = 314,
+     DO = 315,
+     FOR = 316,
+     GOTO = 317,
+     CONTINUE = 318,
+     BREAK = 319,
+     RETURN = 320
    };
 #endif
 /* Tokens.  */
@@ -131,39 +136,53 @@
 #define STATIC 286
 #define AUTO 287
 #define REGISTER 288
-#define CHAR 289
-#define SHORT 290
-#define INT 291
-#define LONG 292
-#define SIGNED 293
-#define UNSIGNED 294
-#define FLOAT 295
-#define DOUBLE 296
-#define CONST 297
-#define VOLATILE 298
-#define VOID 299
-#define STRUCT 300
-#define UNION 301
-#define ENUM 302
-#define ELLIPSIS 303
-#define CASE 304
-#define DEFAULT 305
-#define IF 306
-#define ELSE 307
-#define SWITCH 308
-#define WHILE 309
-#define DO 310
-#define FOR 311
-#define GOTO 312
-#define CONTINUE 313
-#define BREAK 314
-#define RETURN 315
+#define INLINE 289
+#define RESTRICT 290
+#define CHAR 291
+#define SHORT 292
+#define INT 293
+#define LONG 294
+#define SIGNED 295
+#define UNSIGNED 296
+#define FLOAT 297
+#define DOUBLE 298
+#define CONST 299
+#define VOLATILE 300
+#define VOID 301
+#define BOOL 302
+#define COMPLEX 303
+#define IMAGINARY 304
+#define STRUCT 305
+#define UNION 306
+#define ENUM 307
+#define ELLIPSIS 308
+#define CASE 309
+#define DEFAULT 310
+#define IF 311
+#define ELSE 312
+#define SWITCH 313
+#define WHILE 314
+#define DO 315
+#define FOR 316
+#define GOTO 317
+#define CONTINUE 318
+#define BREAK 319
+#define RETURN 320
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+#line 10 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+{
+	const char * file_name;
+	int lineno;
+	int columno;
+}
+/* Line 1529 of yacc.c.  */
+#line 185 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.h"
+	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
