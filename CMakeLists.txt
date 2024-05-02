@@ -20,7 +20,8 @@ if(BISON_FOUND AND FLEX_FOUND)
     FLEX_TARGET(lex_parser ${LEX_SOURCE} ${CMAKE_SOURCE_DIR}/lex.yy.c)
 
     # 将生成的 Parser 和 Scanner 代码添加到你的项目中
-    add_executable(c_scan_pro main.c )
+    add_executable(c_scan_pro c_scan_main.c
+            c_scan_main.h)
 
     # 目标依赖
 else()
@@ -29,6 +30,6 @@ endif()
 
 add_library(lex_parser lex.yy.c)
 add_library(yacc_parser c_scan.tab.c c_scan.tab.h)
-add_library(commom_lib c_scan_common.h c_scan_common.c )
+add_library(commom_lib c_scan_common.h c_scan_common.c)
 
 target_link_libraries(c_scan_pro yacc_parser commom_lib lex_parser)

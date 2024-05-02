@@ -211,8 +211,6 @@ int yylex();
 void yyerror(const char *s);
 
 
-
-
 /* Enabling traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -233,12 +231,12 @@ void yyerror(const char *s);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 13 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 11 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 {
 	struct SYMBOL_INFO_T *symbol_info;
 }
 /* Line 193 of yacc.c.  */
-#line 242 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 240 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -251,7 +249,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 255 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 253 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
 
 #ifdef short
 # undef short
@@ -639,30 +637,30 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    37,    37,    38,    39,    40,    44,    45,    46,    47,
-      48,    49,    50,    51,    52,    53,    57,    58,    62,    63,
-      64,    65,    66,    67,    71,    72,    73,    74,    75,    76,
-      80,    81,    85,    86,    87,    88,    92,    93,    94,    98,
-      99,   100,   104,   105,   106,   107,   108,   112,   113,   114,
-     118,   119,   123,   124,   128,   129,   133,   134,   138,   139,
-     143,   144,   148,   149,   153,   154,   155,   156,   157,   158,
-     159,   160,   161,   162,   163,   167,   168,   172,   176,   177,
-     181,   182,   183,   184,   185,   186,   187,   188,   192,   193,
-     197,   198,   202,   203,   204,   205,   206,   210,   211,   212,
-     213,   214,   215,   216,   217,   218,   219,   220,   221,   222,
-     223,   224,   228,   229,   230,   234,   235,   239,   240,   244,
-     248,   249,   250,   251,   255,   256,   260,   261,   262,   266,
-     267,   268,   269,   270,   274,   275,   279,   280,   284,   285,
-     286,   290,   294,   295,   300,   301,   302,   303,   304,   305,
-     306,   307,   308,   309,   310,   311,   312,   316,   317,   318,
-     319,   323,   324,   329,   330,   334,   335,   339,   340,   341,
-     345,   346,   350,   351,   355,   356,   357,   361,   362,   363,
-     364,   365,   366,   367,   368,   369,   370,   371,   375,   376,
-     377,   381,   382,   383,   384,   388,   392,   393,   397,   398,
-     402,   403,   404,   405,   406,   407,   411,   412,   413,   417,
-     418,   422,   423,   427,   428,   432,   433,   437,   438,   439,
-     443,   444,   445,   446,   447,   448,   452,   453,   454,   455,
-     456,   460,   461,   465,   466,   470,   484,   492,   493
+       0,    35,    35,    36,    37,    38,    42,    43,    44,    45,
+      46,    47,    48,    49,    50,    51,    55,    56,    60,    61,
+      62,    63,    64,    65,    69,    70,    71,    72,    73,    74,
+      78,    79,    83,    84,    85,    86,    90,    91,    92,    96,
+      97,    98,   102,   103,   104,   105,   106,   110,   111,   112,
+     116,   117,   121,   122,   126,   127,   131,   132,   136,   137,
+     141,   142,   146,   147,   151,   152,   153,   154,   155,   156,
+     157,   158,   159,   160,   161,   165,   166,   170,   174,   175,
+     179,   180,   181,   189,   190,   191,   192,   193,   197,   198,
+     202,   203,   207,   208,   209,   210,   211,   215,   216,   217,
+     218,   226,   227,   228,   229,   230,   231,   232,   233,   234,
+     235,   236,   240,   241,   242,   246,   247,   251,   252,   256,
+     260,   261,   262,   263,   267,   268,   272,   273,   274,   278,
+     279,   280,   281,   282,   286,   287,   291,   292,   296,   297,
+     298,   302,   306,   307,   312,   313,   314,   315,   316,   317,
+     318,   319,   320,   321,   322,   323,   324,   328,   329,   330,
+     331,   335,   336,   341,   342,   346,   347,   351,   352,   353,
+     357,   358,   362,   363,   367,   368,   369,   373,   374,   375,
+     376,   377,   378,   379,   380,   381,   382,   383,   387,   388,
+     389,   393,   394,   395,   396,   400,   404,   405,   409,   410,
+     414,   415,   416,   417,   418,   419,   423,   424,   425,   429,
+     430,   434,   435,   439,   440,   444,   445,   449,   450,   451,
+     455,   456,   457,   458,   459,   460,   464,   465,   466,   467,
+     468,   472,   473,   477,   478,   482,   496,   504,   505
 };
 #endif
 
@@ -2088,12 +2086,34 @@ yyreduce:
   switch (yyn)
     {
         case 78:
-#line 176 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 174 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {printf("get 1");}
     break;
 
+  case 82:
+#line 182 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(1) - (1)].symbol_info);
+                printf("\nlineno2 is %d \n", temp_symbol_info->lineno);
+                printf("column2 is %d \n", temp_symbol_info->column);
+                printf("name2 is %s \n", temp_symbol_info->symbol_name);
+                P_FREE(temp_symbol_info);
+	;}
+    break;
+
+  case 100:
+#line 219 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(1) - (1)].symbol_info);
+		printf("lineno is %d \n", temp_symbol_info->lineno);
+		printf("column is %d \n", temp_symbol_info->column);
+		printf("name is %s \n", temp_symbol_info->symbol_name);
+		//P_FREE(temp_symbol_info);
+	;}
+    break;
+
   case 235:
-#line 471 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 483 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	/*
 	for origin c grammer,it like this, we do not advise use this way, so we assert!
@@ -2110,7 +2130,7 @@ yyreduce:
     break;
 
   case 236:
-#line 485 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 497 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 
 
@@ -2119,7 +2139,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 2123 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 2143 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2333,7 +2353,7 @@ yyreturn:
 }
 
 
-#line 495 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 507 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 
 
 extern char* yytext;

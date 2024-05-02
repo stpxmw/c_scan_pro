@@ -686,12 +686,22 @@ char *yytext;
 #line 10 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 #include <stdio.h>
 #include "c_scan.tab.h"
+#include "c_scan_common.h"
 void count();
 void comment();
+
+void* pd_malloc();
+void* pd_free(void * ptr);
+
 int yywrap(void);
 int check_type();
-#line 693 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c"
-#line 694 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c"
+
+
+
+extern int column;
+extern int lineno;
+#line 703 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c"
+#line 704 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c"
 
 #define INITIAL 0
 
@@ -908,9 +918,9 @@ YY_DECL
 		}
 
 	{
-#line 18 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 28 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 
-#line 913 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c"
+#line 923 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -969,506 +979,515 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 19 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 29 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { comment(); }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 20 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 30 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { /* consume //-comment */ }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 23 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 33 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(AUTO); }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 24 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 34 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(BOOL); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 25 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 35 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(BREAK); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 26 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 36 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CASE); }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 27 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 37 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CHAR); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 28 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 38 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(COMPLEX); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 29 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 39 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONST); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 30 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 40 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONTINUE); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 31 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 41 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(DEFAULT); }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 32 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 42 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(DO); }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 33 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 43 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(DOUBLE); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 34 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 44 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(ELSE); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 35 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 45 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(ENUM); }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 36 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 46 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(EXTERN); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 37 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 47 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(FLOAT); }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 38 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 48 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(FOR); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 39 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 49 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(GOTO); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 40 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 50 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(IF); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 41 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 51 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(IMAGINARY); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 42 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 52 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(INLINE); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 43 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
-{ count(); return(INT); }
+#line 53 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+{ count();
+
+                 SYMBOL_INFO_T *temp_info = (SYMBOL_INFO_T *)P_MALLOCA;
+                 SYMBOL_INFO_T *temp_info2 = (SYMBOL_INFO_T *)P_MALLOCA;
+                 temp_info->lineno = lineno;
+                 temp_info->column = column;
+                 temp_info->symbol_name = "int";
+                 yylval.symbol_info =temp_info;
+
+                return(INT); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 44 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 63 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(LONG); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 45 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 64 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(REGISTER); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 46 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 65 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(RESTRICT); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 47 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 66 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(RETURN); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 48 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 67 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(SHORT); }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 49 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 68 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(SIGNED); }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 50 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 69 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(SIZEOF); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 51 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 70 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(STATIC); }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 52 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 71 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(STRUCT); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 53 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 72 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(SWITCH); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 54 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 73 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(TYPEDEF); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 55 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 74 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(UNION); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 56 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 75 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(UNSIGNED); }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 57 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 76 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(VOID); }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 58 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 77 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(VOLATILE); }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 59 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 78 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(WHILE); }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 61 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 80 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(check_type()); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 63 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 82 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 64 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 83 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 65 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 84 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 66 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 85 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 68 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 87 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 69 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 88 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 70 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 89 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 71 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 90 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 72 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 91 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 73 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 92 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(CONSTANT); }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 76 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 95 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(STRING_LITERAL); }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 78 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 97 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(ELLIPSIS); }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 79 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 98 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(RIGHT_ASSIGN); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 80 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 99 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(LEFT_ASSIGN); }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 81 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 100 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(ADD_ASSIGN); }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 82 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 101 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(SUB_ASSIGN); }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 83 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 102 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(MUL_ASSIGN); }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 84 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 103 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(DIV_ASSIGN); }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 85 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 104 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(MOD_ASSIGN); }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 86 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 105 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(AND_ASSIGN); }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 87 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 106 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(XOR_ASSIGN); }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 88 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 107 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(OR_ASSIGN); }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 89 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 108 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(RIGHT_OP); }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 90 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 109 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(LEFT_OP); }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 91 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 110 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(INC_OP); }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 92 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 111 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(DEC_OP); }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 93 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 112 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(PTR_OP); }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 94 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 113 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(AND_OP); }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 95 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 114 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(OR_OP); }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 96 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 115 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(LE_OP); }
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 97 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 116 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(GE_OP); }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 98 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 117 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(EQ_OP); }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 99 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 118 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(NE_OP); }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 100 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 119 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(';'); }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 101 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 120 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('{'); }
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 102 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 121 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('}'); }
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 103 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 122 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(','); }
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 104 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 123 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(':'); }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 105 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 124 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('='); }
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 106 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 125 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('('); }
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 107 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 126 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(')'); }
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 108 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 127 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('['); }
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 109 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 128 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return(']'); }
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 110 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 129 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('.'); }
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 111 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 130 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('&'); }
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 112 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 131 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('!'); }
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 113 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 132 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('~'); }
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 114 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 133 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('-'); }
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 115 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 134 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('+'); }
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 116 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 135 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('*'); }
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 117 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 136 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('/'); }
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 118 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 137 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('%'); }
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 119 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 138 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('<'); }
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 120 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 139 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('>'); }
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 121 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 140 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('^'); }
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 122 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 141 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('|'); }
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 123 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 142 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); return('?'); }
 	YY_BREAK
 case 98:
 /* rule 98 can match eol */
 YY_RULE_SETUP
-#line 125 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 144 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { count(); }
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 126 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 145 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 { /* Add code to complain about unmatched characters */ }
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 128 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 147 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 ECHO;
 	YY_BREAK
-#line 1471 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c"
+#line 1490 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2473,7 +2492,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 128 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
+#line 147 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.l"
 
 
 int yywrap(void)
@@ -2501,7 +2520,8 @@ loop:
 
 
 int column = 0;
-int lineno = 0;
+int lineno = 1;
+
 
 void count()
 {
@@ -2510,7 +2530,7 @@ void count()
 		if (yytext[i] == '\n')
 		{
 			column = 0;
-            ++lineno;
+            lineno++;
         }
 		else if (yytext[i] == '\t')
 			column += 8 - (column % 8);
@@ -2538,4 +2558,3 @@ int check_type()
 
 	return(IDENTIFIER);
 }
-

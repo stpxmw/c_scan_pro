@@ -6,8 +6,6 @@
 #define YYERROR_VERBOSE 1
 int yylex();
 void yyerror(const char *s);
-
-
 %}
 
 %union {
@@ -15,7 +13,7 @@ void yyerror(const char *s);
 }
 
 %type <symbol_info> IDENTIFIER CONSTANT EXTERN STRUCT CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
-
+%type <symbol_info> type_specifier
 
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
@@ -181,6 +179,13 @@ declaration_specifiers
 	: storage_class_specifier
 	| storage_class_specifier declaration_specifiers
 	| type_specifier
+	{
+		SYMBOL_INFO_T *temp_symbol_info = $1;
+                printf("\nlineno2 is %d \n", temp_symbol_info->lineno);
+                printf("column2 is %d \n", temp_symbol_info->column);
+                printf("name2 is %s \n", temp_symbol_info->symbol_name);
+                P_FREE(temp_symbol_info);
+	}
 	| type_specifier declaration_specifiers
 	| type_qualifier
 	| type_qualifier declaration_specifiers
@@ -211,6 +216,13 @@ type_specifier
 	| CHAR
 	| SHORT
 	| INT
+	{
+		SYMBOL_INFO_T *temp_symbol_info = $1;
+		printf("lineno is %d \n", temp_symbol_info->lineno);
+		printf("column is %d \n", temp_symbol_info->column);
+		printf("name is %s \n", temp_symbol_info->symbol_name);
+		//P_FREE(temp_symbol_info);
+	}
 	| LONG
 	| FLOAT
 	| DOUBLE

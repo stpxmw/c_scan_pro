@@ -9,10 +9,20 @@ IS                      ((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))
 %{
 #include <stdio.h>
 #include "c_scan.tab.h"
+#include "c_scan_common.h"
 void count();
 void comment();
+
+void* pd_malloc();
+void* pd_free(void * ptr);
+
 int yywrap(void);
 int check_type();
+
+
+
+extern int column;
+extern int lineno;
 %}
 
 %%
@@ -40,7 +50,16 @@ int check_type();
 "if"			{ count(); return(IF); }
 "_Imaginary"		{ count(); return(IMAGINARY); }
 "inline"		{ count(); return(INLINE); }
-"int"			{ count(); return(INT); }
+"int"			{ count();
+
+                 SYMBOL_INFO_T *temp_info = (SYMBOL_INFO_T *)P_MALLOCA;
+                 SYMBOL_INFO_T *temp_info2 = (SYMBOL_INFO_T *)P_MALLOCA;
+                 temp_info->lineno = lineno;
+                 temp_info->column = column;
+                 temp_info->symbol_name = "int";
+                 yylval.symbol_info =temp_info;
+
+                return(INT); }
 "long"			{ count(); return(LONG); }
 "register"		{ count(); return(REGISTER); }
 "restrict"		{ count(); return(RESTRICT); }
@@ -152,7 +171,8 @@ loop:
 
 
 int column = 0;
-int lineno = 0;
+int lineno = 1;
+
 
 void count()
 {
@@ -161,7 +181,7 @@ void count()
 		if (yytext[i] == '\n')
 		{
 			column = 0;
-            ++lineno;
+            lineno++;
         }
 		else if (yytext[i] == '\t')
 			column += 8 - (column % 8);

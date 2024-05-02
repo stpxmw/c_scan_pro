@@ -49,8 +49,8 @@ cmake_ninja_workdir = /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/cmake-buil
 
 build cmake_object_order_depends_target_c_scan_pro: phony || cmake_object_order_depends_target_commom_lib cmake_object_order_depends_target_lex_parser cmake_object_order_depends_target_yacc_parser
 
-build CMakeFiles/c_scan_pro.dir/main.c.o: C_COMPILER__c_scan_pro_unscanned_Debug /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/main.c || cmake_object_order_depends_target_c_scan_pro
-  DEP_FILE = CMakeFiles/c_scan_pro.dir/main.c.o.d
+build CMakeFiles/c_scan_pro.dir/c_scan_main.c.o: C_COMPILER__c_scan_pro_unscanned_Debug /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan_main.c || cmake_object_order_depends_target_c_scan_pro
+  DEP_FILE = CMakeFiles/c_scan_pro.dir/c_scan_main.c.o.d
   FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
   OBJECT_DIR = CMakeFiles/c_scan_pro.dir
   OBJECT_FILE_DIR = CMakeFiles/c_scan_pro.dir
@@ -63,7 +63,7 @@ build CMakeFiles/c_scan_pro.dir/main.c.o: C_COMPILER__c_scan_pro_unscanned_Debug
 #############################################
 # Link the executable c_scan_pro
 
-build c_scan_pro: C_EXECUTABLE_LINKER__c_scan_pro_Debug CMakeFiles/c_scan_pro.dir/main.c.o | libyacc_parser.a libcommom_lib.a liblex_parser.a || libcommom_lib.a liblex_parser.a libyacc_parser.a
+build c_scan_pro: C_EXECUTABLE_LINKER__c_scan_pro_Debug CMakeFiles/c_scan_pro.dir/c_scan_main.c.o | libyacc_parser.a libcommom_lib.a liblex_parser.a || libcommom_lib.a liblex_parser.a libyacc_parser.a
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6
   LINK_LIBRARIES = libyacc_parser.a  libcommom_lib.a  liblex_parser.a
   OBJECT_DIR = CMakeFiles/c_scan_pro.dir

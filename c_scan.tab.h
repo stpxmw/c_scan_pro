@@ -174,7 +174,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 13 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 11 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 {
 	struct SYMBOL_INFO_T *symbol_info;
 }
