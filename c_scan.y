@@ -1,19 +1,21 @@
 %{
-#define YYERROR_VERBOSE 1
-int yylex();
-void yyerror(const char *s);
 #include <stdio.h>
 #include <assert.h>
 #include "c_scan_common.h"
+
+#define YYERROR_VERBOSE 1
+int yylex();
+void yyerror(const char *s);
+
+
 %}
 
 %union {
-	const char * file_name;
-	int lineno;
-	int columno;
+	struct SYMBOL_INFO_T *symbol_info;
 }
 
-%type <file_name> declarator
+%type <symbol_info> IDENTIFIER CONSTANT EXTERN STRUCT CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
+
 
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP

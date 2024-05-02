@@ -174,14 +174,12 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 10 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 13 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 {
-	const char * file_name;
-	int lineno;
-	int columno;
+	struct SYMBOL_INFO_T *symbol_info;
 }
 /* Line 1529 of yacc.c.  */
-#line 185 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.h"
+#line 183 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

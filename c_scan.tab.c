@@ -202,12 +202,15 @@
 /* Copy the first part of user declarations.  */
 #line 1 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 
-#define YYERROR_VERBOSE 1
-int yylex();
-void yyerror(const char *s);
 #include <stdio.h>
 #include <assert.h>
 #include "c_scan_common.h"
+
+#define YYERROR_VERBOSE 1
+int yylex();
+void yyerror(const char *s);
+
+
 
 
 /* Enabling traces.  */
@@ -230,14 +233,12 @@ void yyerror(const char *s);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 10 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 13 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 {
-	const char * file_name;
-	int lineno;
-	int columno;
+	struct SYMBOL_INFO_T *symbol_info;
 }
 /* Line 193 of yacc.c.  */
-#line 241 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 242 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -250,7 +251,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 254 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 255 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
 
 #ifdef short
 # undef short
@@ -638,30 +639,30 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    35,    35,    36,    37,    38,    42,    43,    44,    45,
-      46,    47,    48,    49,    50,    51,    55,    56,    60,    61,
-      62,    63,    64,    65,    69,    70,    71,    72,    73,    74,
-      78,    79,    83,    84,    85,    86,    90,    91,    92,    96,
-      97,    98,   102,   103,   104,   105,   106,   110,   111,   112,
-     116,   117,   121,   122,   126,   127,   131,   132,   136,   137,
-     141,   142,   146,   147,   151,   152,   153,   154,   155,   156,
-     157,   158,   159,   160,   161,   165,   166,   170,   174,   175,
-     179,   180,   181,   182,   183,   184,   185,   186,   190,   191,
-     195,   196,   200,   201,   202,   203,   204,   208,   209,   210,
-     211,   212,   213,   214,   215,   216,   217,   218,   219,   220,
-     221,   222,   226,   227,   228,   232,   233,   237,   238,   242,
-     246,   247,   248,   249,   253,   254,   258,   259,   260,   264,
-     265,   266,   267,   268,   272,   273,   277,   278,   282,   283,
-     284,   288,   292,   293,   298,   299,   300,   301,   302,   303,
-     304,   305,   306,   307,   308,   309,   310,   314,   315,   316,
-     317,   321,   322,   327,   328,   332,   333,   337,   338,   339,
-     343,   344,   348,   349,   353,   354,   355,   359,   360,   361,
-     362,   363,   364,   365,   366,   367,   368,   369,   373,   374,
-     375,   379,   380,   381,   382,   386,   390,   391,   395,   396,
-     400,   401,   402,   403,   404,   405,   409,   410,   411,   415,
-     416,   420,   421,   425,   426,   430,   431,   435,   436,   437,
-     441,   442,   443,   444,   445,   446,   450,   451,   452,   453,
-     454,   458,   459,   463,   464,   468,   482,   490,   491
+       0,    37,    37,    38,    39,    40,    44,    45,    46,    47,
+      48,    49,    50,    51,    52,    53,    57,    58,    62,    63,
+      64,    65,    66,    67,    71,    72,    73,    74,    75,    76,
+      80,    81,    85,    86,    87,    88,    92,    93,    94,    98,
+      99,   100,   104,   105,   106,   107,   108,   112,   113,   114,
+     118,   119,   123,   124,   128,   129,   133,   134,   138,   139,
+     143,   144,   148,   149,   153,   154,   155,   156,   157,   158,
+     159,   160,   161,   162,   163,   167,   168,   172,   176,   177,
+     181,   182,   183,   184,   185,   186,   187,   188,   192,   193,
+     197,   198,   202,   203,   204,   205,   206,   210,   211,   212,
+     213,   214,   215,   216,   217,   218,   219,   220,   221,   222,
+     223,   224,   228,   229,   230,   234,   235,   239,   240,   244,
+     248,   249,   250,   251,   255,   256,   260,   261,   262,   266,
+     267,   268,   269,   270,   274,   275,   279,   280,   284,   285,
+     286,   290,   294,   295,   300,   301,   302,   303,   304,   305,
+     306,   307,   308,   309,   310,   311,   312,   316,   317,   318,
+     319,   323,   324,   329,   330,   334,   335,   339,   340,   341,
+     345,   346,   350,   351,   355,   356,   357,   361,   362,   363,
+     364,   365,   366,   367,   368,   369,   370,   371,   375,   376,
+     377,   381,   382,   383,   384,   388,   392,   393,   397,   398,
+     402,   403,   404,   405,   406,   407,   411,   412,   413,   417,
+     418,   422,   423,   427,   428,   432,   433,   437,   438,   439,
+     443,   444,   445,   446,   447,   448,   452,   453,   454,   455,
+     456,   460,   461,   465,   466,   470,   484,   492,   493
 };
 #endif
 
@@ -2087,12 +2088,12 @@ yyreduce:
   switch (yyn)
     {
         case 78:
-#line 174 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 176 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {printf("get 1");}
     break;
 
   case 235:
-#line 469 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 471 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	/*
 	for origin c grammer,it like this, we do not advise use this way, so we assert!
@@ -2109,7 +2110,7 @@ yyreduce:
     break;
 
   case 236:
-#line 483 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 485 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 
 
@@ -2118,7 +2119,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 2122 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 2123 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2332,7 +2333,7 @@ yyreturn:
 }
 
 
-#line 493 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 495 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 
 
 extern char* yytext;
