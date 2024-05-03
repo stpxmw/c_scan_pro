@@ -4,15 +4,87 @@
 #include "assert.h"
 #include "c_scan_common.h"
 
-
 extern FILE *yyin;
 extern int yyparse();
 void* inital_memory = NULL;
 
 unsigned char* first_search_location = ZERO;
 unsigned char* search_location = ZERO;//we use this flag to speed up memory search
-//unsigned char* free_location = ZERO;//we use this flag to speed up memory search
 unsigned char* last_search_location = ZERO;//we use this flag to speed up memory search
+
+Node *struct_link_list = NULL;
+
+
+Node* createNode(char* data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Error: unable to create new node\n");
+        exit(1);
+    }
+    newNode->data = strdup(data);  // 为字符串分配空间并复制内容
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertAtHead(Node** head, char* data) {
+    Node* newNode = createNode(data);
+    newNode->next = *head;
+    *head = newNode;
+}
+
+
+Node* findNode(Node* head, char* data) {
+    Node* current = head;
+    while (current != NULL && strcmp(current->data, data) != 0) {
+        current = current->next;
+    }
+    return current;
+}
+
+void deleteNode(Node** head, char* data) {
+    Node* current = *head;
+    Node* previous = NULL;
+
+    // 空链表或未找到节点
+    if (current == NULL || strcmp(current->data, data) == 0) {
+        return;
+    }
+
+    // 查找节点
+    while (strcmp(current->data, data) != 0 && current->next != NULL) {
+        previous = current;
+        current = current->next;
+    }
+
+    // 如果找到节点，则删除它
+    if (strcmp(current->data, data) == 0) {
+        if (previous == NULL) {  // 删除的是头节点
+            *head = current->next;
+        } else {
+            previous->next = current->next;
+        }
+        free(current->data);  // 释放字符串内存
+        free(current);        // 释放节点内存
+    }
+}
+
+// 向链表中插入节点
+void insertNode(Node** head, void* data) {
+    Node* newNode = createNode(data);
+    newNode->next = *head;
+    *head = newNode;
+}
+
+void printList(Node* head) {
+    Node* current = head;
+    while (current != NULL) {
+        printf("%s -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+
 
 void p_memory_init(void)
 {
@@ -40,11 +112,21 @@ void p_memory_init(void)
         } else{
             break;
         }
-
     }
     if (temp_init_memory_loc != last_search_location){
         printf("memory init error! the memory boundary is not align!");
         assert(ZERO);
+    }
+}
+
+void print_item_name(char *ptr,int len)
+{
+    int i;
+//    for(i = 0;i< len;i++){
+//        printf("%d ",*ptr++);
+//    }
+    for(i = 0;i< len;i++){
+        printf("%c",*ptr++);
     }
 }
 
@@ -57,7 +139,11 @@ void memory_leak_check(void)
         if ( MEMORY_USED EQ *((int *)check_mem_ptr) )
         {
             printf("warning! memory not released! may cause mem leak! :%p",check_mem_ptr);
-            printf("   line: %d\n",*((int *)(check_mem_ptr + sizeof(int))));
+            printf("   line: %d str name:---|",*((int *)(check_mem_ptr + sizeof(int))));
+            print_item_name(((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->symbol_name,((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->no_name);
+            printf("|---");
+            printf("symbol location is : line:%d, col:%d ",((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->lineno,((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->column);
+            printf("\n");
         }
         check_mem_ptr += MEMORY_UNIT_SIZE;
     }
@@ -99,15 +185,13 @@ void lex_yacc_parser_deinit(void)
  */
 void* pd_malloc(int line)
 {
-    int find_flag = ZERO;
-    int i = ZERO;
     void *find_memory_unit = NULL;
     unsigned char* temp_search_location = search_location;
     //first we try to search memory in (search_location,last_search_location)
     while(temp_search_location <= last_search_location){
         if (*((int*)temp_search_location) EQ MEMORY_UNUSED){
             //this memory unit not used
-            //assign result
+            //assign val
             *((int*)temp_search_location) = MEMORY_USED;
             *((int*)(temp_search_location + sizeof(int))) = line;
             search_location = temp_search_location;
@@ -177,21 +261,22 @@ void* pd_malloc(int line)
 
 void* pd_free(void *ptr)
 {
-
-
-
     void *temp_ptr = NULL;
     temp_ptr = ptr-2*sizeof(int);
 
     if( MEMORY_USED EQ *( (int *)(temp_ptr)) )
     {
 #ifdef MEMORY_DEBUG
-        printf("the mem block %p is in  used,start free! \n",temp_ptr);
+        printf("MEMORY_DEBUG: FREE ADDR %p  \n",temp_ptr);
 #endif
 
     }else if(MEMORY_UNUSED EQ *( (int *)(temp_ptr))) {
 #ifdef MEMORY_DEBUG
-        printf("the mem block is not in used,do not free! \n");
+        //printf("the mem block is not in used,do not free! \n");
+        if (NULL NEQ (((SYMBOL_INFO_T*)temp_ptr)->symbol_name) ){
+            assert(0);
+        }
+        return ptr;
 #endif
     }else{
         printf("the mem block is damaged! \n");
@@ -200,6 +285,7 @@ void* pd_free(void *ptr)
     //flag it to be not used and memset it to be 0
     *( (int *)(temp_ptr)) = MEMORY_UNUSED;
     temp_ptr += sizeof(int);
+    //clean line
     memset(temp_ptr,ZERO,sizeof(int));
     temp_ptr += sizeof(int);
     if (ptr NEQ temp_ptr){
@@ -207,9 +293,10 @@ void* pd_free(void *ptr)
     }
     if (NULL NEQ (((SYMBOL_INFO_T*)temp_ptr)->symbol_name) ){
         //const char* do not need to free by hands
-        //RW_FREE( ((SYMBOL_INFO_T*)temp_ptr)->symbol_name);
+        RW_FREE( (((SYMBOL_INFO_T*)temp_ptr)->symbol_name) );
+        memset(  &(((SYMBOL_INFO_T*)temp_ptr)->symbol_name) ,ZERO,sizeof(char*));
     }
-    //then we clean it to zero
+    //we clean it to zero
     memset(temp_ptr,ZERO,sizeof(SYMBOL_INFO_T));
     //return
     return ptr;

@@ -204,11 +204,13 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 #include "c_scan_common.h"
 
 #define YYERROR_VERBOSE 1
 int yylex();
 void yyerror(const char *s);
+extern Node *struct_link_list;
 
 
 /* Enabling traces.  */
@@ -231,12 +233,12 @@ void yyerror(const char *s);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 11 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 13 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 {
 	struct SYMBOL_INFO_T *symbol_info;
 }
 /* Line 193 of yacc.c.  */
-#line 240 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 242 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -249,7 +251,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 253 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 255 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
 
 #ifdef short
 # undef short
@@ -637,30 +639,30 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    35,    35,    36,    37,    38,    42,    43,    44,    45,
-      46,    47,    48,    49,    50,    51,    55,    56,    60,    61,
-      62,    63,    64,    65,    69,    70,    71,    72,    73,    74,
-      78,    79,    83,    84,    85,    86,    90,    91,    92,    96,
-      97,    98,   102,   103,   104,   105,   106,   110,   111,   112,
-     116,   117,   121,   122,   126,   127,   131,   132,   136,   137,
-     141,   142,   146,   147,   151,   152,   153,   154,   155,   156,
-     157,   158,   159,   160,   161,   165,   166,   170,   174,   175,
-     179,   180,   181,   189,   190,   191,   192,   193,   197,   198,
-     202,   203,   207,   208,   209,   210,   211,   215,   216,   217,
-     218,   226,   227,   228,   229,   230,   231,   232,   233,   234,
-     235,   236,   240,   241,   242,   246,   247,   251,   252,   256,
-     260,   261,   262,   263,   267,   268,   272,   273,   274,   278,
-     279,   280,   281,   282,   286,   287,   291,   292,   296,   297,
-     298,   302,   306,   307,   312,   313,   314,   315,   316,   317,
-     318,   319,   320,   321,   322,   323,   324,   328,   329,   330,
-     331,   335,   336,   341,   342,   346,   347,   351,   352,   353,
-     357,   358,   362,   363,   367,   368,   369,   373,   374,   375,
-     376,   377,   378,   379,   380,   381,   382,   383,   387,   388,
-     389,   393,   394,   395,   396,   400,   404,   405,   409,   410,
-     414,   415,   416,   417,   418,   419,   423,   424,   425,   429,
-     430,   434,   435,   439,   440,   444,   445,   449,   450,   451,
-     455,   456,   457,   458,   459,   460,   464,   465,   466,   467,
-     468,   472,   473,   477,   478,   482,   496,   504,   505
+       0,    37,    37,    38,    39,    40,    44,    45,    46,    47,
+      48,    49,    50,    51,    52,    53,    57,    58,    62,    63,
+      64,    65,    66,    67,    71,    72,    73,    74,    75,    76,
+      80,    81,    85,    86,    87,    88,    92,    93,    94,    98,
+      99,   100,   104,   105,   106,   107,   108,   112,   113,   114,
+     118,   119,   123,   124,   128,   129,   133,   134,   138,   139,
+     143,   144,   148,   149,   153,   154,   155,   156,   157,   158,
+     159,   160,   161,   162,   163,   167,   168,   172,   176,   177,
+     204,   205,   206,   210,   211,   212,   213,   214,   218,   222,
+     226,   230,   234,   235,   236,   237,   238,   242,   244,   245,
+     246,   250,   251,   252,   253,   254,   255,   256,   257,   258,
+     259,   260,   264,   277,   279,   293,   297,   304,   305,   309,
+     313,   314,   315,   316,   320,   321,   325,   326,   327,   331,
+     332,   333,   334,   335,   339,   340,   344,   345,   349,   350,
+     351,   355,   359,   363,   371,   375,   376,   377,   378,   379,
+     380,   381,   382,   383,   384,   388,   389,   396,   397,   398,
+     399,   403,   404,   409,   410,   414,   415,   419,   420,   421,
+     425,   426,   430,   431,   435,   436,   437,   441,   442,   443,
+     444,   445,   446,   447,   448,   449,   450,   451,   455,   456,
+     457,   461,   462,   463,   464,   468,   472,   473,   477,   478,
+     482,   483,   484,   485,   486,   487,   491,   492,   493,   497,
+     498,   502,   503,   507,   508,   512,   513,   517,   518,   519,
+     523,   524,   525,   526,   527,   528,   532,   533,   534,   535,
+     536,   540,   541,   545,   546,   550,   564,   572,   573
 };
 #endif
 
@@ -2086,34 +2088,150 @@ yyreduce:
   switch (yyn)
     {
         case 78:
-#line 174 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 176 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {printf("get 1");}
     break;
 
-  case 82:
-#line 182 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+  case 79:
+#line 178 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
-		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(1) - (1)].symbol_info);
-                printf("\nlineno2 is %d \n", temp_symbol_info->lineno);
-                printf("column2 is %d \n", temp_symbol_info->column);
-                printf("name2 is %s \n", temp_symbol_info->symbol_name);
-                P_FREE(temp_symbol_info);
+#ifdef BISON_DEBUG
+		SYMBOL_INFO_T *temp_symbol_info0 = (yyvsp[(1) - (3)].symbol_info);
+
+		if ((NULL NEQ temp_symbol_info0) && (NULL NEQ temp_symbol_info0->symbol_name) )
+		{
+			printf("kkkkget token %s \n	",temp_symbol_info0->symbol_name );
+		}
+#endif
+
+		(yyval.symbol_info) = (yyvsp[(2) - (3)].symbol_info);
+		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(2) - (3)].symbol_info);
+
+		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
+		{
+			if(strcmp(temp_symbol_info0->symbol_name, "typedef") == 0 )
+				insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+#ifdef BISON_DEBUG
+			printf("get token %s \n	",temp_symbol_info->symbol_name );
+#endif
+		}
+
 	;}
     break;
 
-  case 100:
-#line 219 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+  case 82:
+#line 207 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(1) - (1)].symbol_info);
-		printf("lineno is %d \n", temp_symbol_info->lineno);
-		printf("column is %d \n", temp_symbol_info->column);
-		printf("name is %s \n", temp_symbol_info->symbol_name);
-		//P_FREE(temp_symbol_info);
+	;}
+    break;
+
+  case 88:
+#line 219 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+		(yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
+	;}
+    break;
+
+  case 90:
+#line 227 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+	 (yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
+	;}
+    break;
+
+  case 97:
+#line 243 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {;}
+    break;
+
+  case 100:
+#line 247 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+
+	;}
+    break;
+
+  case 112:
+#line 265 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(2) - (5)].symbol_info);
+		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
+		{
+			//insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+#ifdef BISON_DEBUG
+                	printf("get token %s \n	",temp_symbol_info->symbol_name );
+#endif
+		}
+
+	;}
+    break;
+
+  case 114:
+#line 280 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(2) - (2)].symbol_info);
+		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
+		{
+			//insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+#ifdef BISON_DEBUG
+			printf("get token %s \n	", temp_symbol_info->symbol_name);
+#endif
+		}
+	;}
+    break;
+
+  case 115:
+#line 294 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+	  (yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
+	;}
+    break;
+
+  case 116:
+#line 298 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+	  (yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
+	;}
+    break;
+
+  case 142:
+#line 360 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+            (yyval.symbol_info) = (yyvsp[(2) - (2)].symbol_info);
+        ;}
+    break;
+
+  case 143:
+#line 364 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+	   (yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
+	;}
+    break;
+
+  case 144:
+#line 372 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+		(yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
+	;}
+    break;
+
+  case 154:
+#line 385 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+		printf("funccc"); //this means the function
+	;}
+    break;
+
+  case 156:
+#line 390 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+	printf("funccc2"); //this means the function
 	;}
     break;
 
   case 235:
-#line 483 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 551 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	/*
 	for origin c grammer,it like this, we do not advise use this way, so we assert!
@@ -2130,7 +2248,7 @@ yyreduce:
     break;
 
   case 236:
-#line 497 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 565 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 
 
@@ -2139,7 +2257,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 2143 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 2261 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2353,7 +2471,7 @@ yyreturn:
 }
 
 
-#line 507 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 575 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 
 
 extern char* yytext;

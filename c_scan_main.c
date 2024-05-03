@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include "c_scan_common.h"
 
-
+extern Node *struct_link_list;
 
 
 int main() {
-    int len = 0;
+    int len;
     lex_yacc_parser_init();
     //printf("Hello, World!\n");
     read_file("../test.txt");
@@ -13,5 +13,6 @@ int main() {
     len = sizeof(MEMORY_UNIT);
     printf("len %d \n", len);
     lex_yacc_parser_deinit();
+    printList(struct_link_list);
     return 0;
 }

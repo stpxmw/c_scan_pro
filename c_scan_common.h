@@ -19,9 +19,16 @@
 #define P_MALLOCA pd_malloc(__LINE__)
 #define P_FREE pd_free
 #else
-#define P_MALLOCA malloc
+#define P_MALLOCA malloc(sizeof(SYMBOL_INFO_T))
 #define P_FREE free
 #endif
+
+
+
+typedef struct Node {
+    char* data;
+    struct Node* next;
+} Node;
 
 typedef struct {
     int val_int;
@@ -30,6 +37,7 @@ typedef struct {
 
 typedef struct {
     char* symbol_name;//attention! this field must be free before MEMORY_UNIT
+    int no_name;
     int lineno;
     int column;
     VALUE val;
@@ -52,11 +60,13 @@ void p_memory_deinit(void);
 
 void memory_leak_check(void);
 
-void* pd_malloc();
+void* pd_malloc(int line);
 void* pd_free(void * ptr);
 
-
-
-
+Node* createNode(char* data);
+void insertAtHead(Node** head, char* data);
+void deleteNode(Node** head, char* data);
+void printList(Node* head);
+Node* findNode(Node* head, char* data);
 
 #endif //C_SCAN_C_SCAN_COMMON_H

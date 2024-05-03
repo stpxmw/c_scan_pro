@@ -1,19 +1,21 @@
 %{
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 #include "c_scan_common.h"
 
 #define YYERROR_VERBOSE 1
 int yylex();
 void yyerror(const char *s);
+extern Node *struct_link_list;
 %}
 
 %union {
 	struct SYMBOL_INFO_T *symbol_info;
 }
 
-%type <symbol_info> IDENTIFIER CONSTANT EXTERN STRUCT CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
-%type <symbol_info> type_specifier
+%type <symbol_info> IDENTIFIER CONSTANT EXTERN STRUCT CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID UNION
+%type <symbol_info> type_specifier declaration_specifiers direct_declarator declarator init_declarator_list init_declarator declaration struct_or_union
 
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
@@ -173,6 +175,29 @@ constant_expression
 declaration
 	: declaration_specifiers ';' {printf("get 1")}
 	| declaration_specifiers init_declarator_list ';'
+	{
+#ifdef BISON_DEBUG
+		SYMBOL_INFO_T *temp_symbol_info0 = $1;
+
+		if ((NULL NEQ temp_symbol_info0) && (NULL NEQ temp_symbol_info0->symbol_name) )
+		{
+			printf("kkkkget token %s \n	",temp_symbol_info0->symbol_name );
+		}
+#endif
+
+		$$ = $2;
+		SYMBOL_INFO_T *temp_symbol_info = $2;
+
+		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
+		{
+			if(strcmp(temp_symbol_info0->symbol_name, "typedef") == 0 )
+				insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+#ifdef BISON_DEBUG
+			printf("get token %s \n	",temp_symbol_info->symbol_name );
+#endif
+		}
+
+	}
 	;
 
 declaration_specifiers
@@ -181,10 +206,6 @@ declaration_specifiers
 	| type_specifier
 	{
 		SYMBOL_INFO_T *temp_symbol_info = $1;
-                printf("\nlineno2 is %d \n", temp_symbol_info->lineno);
-                printf("column2 is %d \n", temp_symbol_info->column);
-                printf("name2 is %s \n", temp_symbol_info->symbol_name);
-                P_FREE(temp_symbol_info);
 	}
 	| type_specifier declaration_specifiers
 	| type_qualifier
@@ -195,11 +216,17 @@ declaration_specifiers
 
 init_declarator_list
 	: init_declarator
+	{
+		$$ = $1;
+	}
 	| init_declarator_list ',' init_declarator
 	;
 
 init_declarator
 	: declarator
+	{
+	 $$ = $1;
+	}
 	| declarator '=' initializer
 	;
 
@@ -213,15 +240,12 @@ storage_class_specifier
 
 type_specifier
 	: VOID
+	{}
 	| CHAR
 	| SHORT
 	| INT
 	{
-		SYMBOL_INFO_T *temp_symbol_info = $1;
-		printf("lineno is %d \n", temp_symbol_info->lineno);
-		printf("column is %d \n", temp_symbol_info->column);
-		printf("name is %s \n", temp_symbol_info->symbol_name);
-		//P_FREE(temp_symbol_info);
+
 	}
 	| LONG
 	| FLOAT
@@ -238,13 +262,42 @@ type_specifier
 
 struct_or_union_specifier
 	: struct_or_union IDENTIFIER '{' struct_declaration_list '}'
+	{
+		SYMBOL_INFO_T *temp_symbol_info = $2;
+		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
+		{
+			//insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+#ifdef BISON_DEBUG
+                	printf("get token %s \n	",temp_symbol_info->symbol_name );
+#endif
+		}
+
+	}
+
 	| struct_or_union '{' struct_declaration_list '}'
+
 	| struct_or_union IDENTIFIER
+	{
+		SYMBOL_INFO_T *temp_symbol_info = $2;
+		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
+		{
+			//insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+#ifdef BISON_DEBUG
+			printf("get token %s \n	", temp_symbol_info->symbol_name);
+#endif
+		}
+	}
 	;
 
 struct_or_union
 	: STRUCT
+	{
+	  $$ = $1;
+	}
 	| UNION
+	{
+	  $$ = $1;
+	}
 	;
 
 struct_declaration_list
@@ -304,12 +357,21 @@ function_specifier
 
 declarator
 	: pointer direct_declarator
+	{
+            $$ = $2;
+        }
 	| direct_declarator
+	{
+	   $$ = $1;
+	}
 	;
 
 
 direct_declarator
 	: IDENTIFIER
+	{
+		$$ = $1;
+	}
 	| '(' declarator ')'
 	| direct_declarator '[' type_qualifier_list assignment_expression ']'
 	| direct_declarator '[' type_qualifier_list ']'
@@ -320,8 +382,14 @@ direct_declarator
 	| direct_declarator '[' '*' ']'
 	| direct_declarator '[' ']'
 	| direct_declarator '(' parameter_type_list ')'
+	{
+		printf("funccc"); //this means the function
+	}
 	| direct_declarator '(' identifier_list ')'
 	| direct_declarator '(' ')'
+	{
+	printf("funccc2"); //this means the function
+	}
 	;
 
 pointer

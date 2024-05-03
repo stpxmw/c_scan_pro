@@ -1,38 +1,46 @@
+typedef struct Node {
+    char* data;
+    struct Node* next;
+}Node;
 
+typedef struct  {
+    int val_int;
+    char *val_char;
+}VALUE;
+
+
+typedef struct {
+    char* symbol_name;//attention! this field must be free before MEMORY_UNIT
+    int no_name;
+    int lineno;
+    int column;
+    VALUE val;
+} SYMBOL_INFO_T;
+typedef struct {
+    int flag;
+    int alloc_line;
+    SYMBOL_INFO_T t;
+}MEMORY_UNIT;
+void read_file(const char* path);
+void lex_yacc_parser_init(void);
+void lex_yacc_parser_deinit(void);
+void p_memory_init(void);
+void p_memory_deinit(void);
+void memory_leak_check(void);
+void* pd_malloc(int line);
+void* pd_free(void * ptr);
+Node* createNode(char* data);
+void insertAtHead(Node** head, char* data);
+void deleteNode(Node** head, char* data);
+void printList(Node* head);
 int main() {
+    int len;
+    lex_yacc_parser_init();
+    //printf("Hello, World!\n");
     read_file("../test.txt");
-
+    //test();
+    len = sizeof(MEMORY_UNIT);
+    printf("len %d \n", len);
+    lex_yacc_parser_deinit();
     return 0;
 }
-
-int main ( char * t,char * m)  {
-    printf("Hello, World!\n");
-    test();
-}
-int main2()  {
-    printf("Hello, World!\n");
-    test();
-
-}
-
-int main44()  {
-    printf("Hello, World!\n");
-    test();
-
-}
-
-
-inline int main4() {
-    printf("Hello, World!\n");
-    test();
-}
-//inline int main ( int (*funcp)(void),int (*funcp)(void)){}
-
-/*
-int
-add_values (x, y)
-    int x;int y;
-{
-  return x + y;
-}
-*/
