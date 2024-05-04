@@ -2143,13 +2143,13 @@ yyreduce:
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			//free buffer for current node
-                        P_FREE((yyvsp[(1) - (1)].symbol_info));
-                        P_FREE((yyval.symbol_info));
+                        //P_FREE($1);
+                        //P_FREE($$);
 		} else {
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			//free buffer for current node
-			P_FREE((yyvsp[(1) - (1)].symbol_info));
-			P_FREE((yyval.symbol_info));
+			//P_FREE($1);
+			//P_FREE($$);
 		}
 		(yyval.symbol_info) = next_node;
 
@@ -2181,16 +2181,16 @@ yyreduce:
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 			//free buffer for current node
-                        P_FREE((yyvsp[(1) - (2)].symbol_info));
-                        P_FREE((yyvsp[(2) - (2)].symbol_info));
-                        P_FREE((yyval.symbol_info));
+                        //P_FREE($1);
+                        //P_FREE($2);
+                        //P_FREE($$);
 		} else {
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 			//free buffer for current node
-			P_FREE((yyvsp[(1) - (2)].symbol_info));
-			P_FREE((yyvsp[(2) - (2)].symbol_info));
+			//P_FREE($1);
+			//P_FREE($2);
 		}
 		(yyval.symbol_info) = next_node;
 
@@ -2214,7 +2214,7 @@ yyreduce:
 		memset(next_node->symbol_name, 0, MAX_SYMBOL_LEN);
 		SYMBOL_INFO_T* cur_node = (yyvsp[(1) - (1)].symbol_info);
 		strcat(next_node->symbol_name,cur_node->symbol_name);
-		P_FREE((yyvsp[(1) - (1)].symbol_info));
+		//P_FREE($1);
 		(yyval.symbol_info) = next_node;
         	if ((NULL NEQ next_node) && (NULL NEQ next_node->symbol_name) )
         	{
@@ -2244,16 +2244,16 @@ yyreduce:
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 			//free buffer for current node
-                        P_FREE((yyvsp[(1) - (2)].symbol_info));
-                        P_FREE((yyvsp[(2) - (2)].symbol_info));
-                        P_FREE((yyval.symbol_info));
+                        //P_FREE($1);
+                        //P_FREE($2);
+                        //P_FREE($$);
 		} else {
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 			//free buffer for current node
-			P_FREE((yyvsp[(1) - (2)].symbol_info));
-			P_FREE((yyvsp[(2) - (2)].symbol_info));
+			//P_FREE($1);
+			//P_FREE($2);
 		}
 		(yyval.symbol_info) = next_node;
 
@@ -2292,16 +2292,16 @@ yyreduce:
         			strcat(next_node->symbol_name," ");
         			strcat(next_node->symbol_name,cur_node2->symbol_name);
         			//free buffer for current node
-                                P_FREE((yyvsp[(1) - (2)].symbol_info));
-                                P_FREE((yyvsp[(2) - (2)].symbol_info));
-                                P_FREE((yyval.symbol_info));
+                                //P_FREE($1);
+                                //P_FREE($2);
+                                //P_FREE($$);
         		} else {
         			strcat(next_node->symbol_name,cur_node->symbol_name);
         			strcat(next_node->symbol_name," ");
         			strcat(next_node->symbol_name,cur_node2->symbol_name);
         			//free buffer for current node
-        			P_FREE((yyvsp[(1) - (2)].symbol_info));
-        			P_FREE((yyvsp[(2) - (2)].symbol_info));
+        			//P_FREE($1);
+        			//P_FREE($2);
         		}
         		(yyval.symbol_info) = next_node;
 
@@ -2420,7 +2420,7 @@ yyreduce:
 		next_node->fun_type = FUN_NO_FUNC;
 		next_node->fun_name = strdup(temp_id->symbol_name);
 		(yyval.function_d) = next_node;
-		P_FREE((yyvsp[(1) - (1)].symbol_info));
+		//P_FREE($1);
 	;}
     break;
 
@@ -2450,8 +2450,8 @@ yyreduce:
 #endif
 		(yyval.function_d) = next_node;
 		RW_FREE((yyvsp[(1) - (4)].function_d));
-		P_FREE((yyvsp[(2) - (4)].symbol_info));
-		P_FREE((yyvsp[(4) - (4)].symbol_info));
+		//P_FREE($2);
+		//P_FREE($4);
 	;}
     break;
 
@@ -2506,7 +2506,7 @@ yyreduce:
 		 strcat(next_node->symbol_name,temp_symbol_info->symbol_name);
 		 ASSIGN_SYMBOL_LOC(next_node,temp_symbol_info);
 		 (yyval.symbol_info) = next_node;
-		 P_FREE((yyvsp[(1) - (1)].symbol_info));
+		 //P_FREE($1);
 	;}
     break;
 
@@ -2531,8 +2531,8 @@ yyreduce:
                  strcat(next_node->symbol_name,temp_symbol_info2->symbol_name);
         	 ASSIGN_SYMBOL_LOC(next_node,temp_symbol_info2);
         	 (yyval.symbol_info) = next_node;
-        	 P_FREE((yyvsp[(1) - (2)].symbol_info));
-        	 P_FREE((yyvsp[(2) - (2)].symbol_info));
+        	 //P_FREE($1);
+        	 //P_FREE($2);
 
 	;}
     break;
@@ -2552,8 +2552,8 @@ yyreduce:
                           strcat(next_node->symbol_name,temp_symbol_info2->symbol_name);
                  	 ASSIGN_SYMBOL_LOC(next_node,temp_symbol_info2);
                  	 (yyval.symbol_info) = next_node;
-                 	 P_FREE((yyvsp[(1) - (3)].symbol_info));
-                 	 P_FREE((yyvsp[(3) - (3)].symbol_info));
+                 	 //P_FREE($1);
+                 	 //P_FREE($3);
 	;}
     break;
 
@@ -2580,7 +2580,7 @@ yyreduce:
 		memcpy(param_list->param_list[param_list->no_param].param_type,temp_symbol_info->symbol_name,strlen(temp_symbol_info->symbol_name));
 		param_list->no_param++;
 		(yyval.param_list) = param_list;
-		P_FREE((yyvsp[(1) - (1)].symbol_info));
+		//P_FREE($1);
 
 	;}
     break;
@@ -2620,7 +2620,7 @@ yyreduce:
                 			strcat(next_node->symbol_name," ");
                                         strcat(next_node->symbol_name,cur_node2->point_str);
                 		}
-                		P_FREE((yyvsp[(1) - (2)].symbol_info));
+                		//P_FREE($1);
                 		(yyval.symbol_info) = next_node;
                 		//print_symbols(next_node);
 #ifdef BISON_DEBUG
@@ -2651,8 +2651,8 @@ yyreduce:
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 		}
 
-		P_FREE((yyvsp[(1) - (2)].symbol_info));
-		P_FREE((yyvsp[(2) - (2)].symbol_info));
+		//P_FREE($1);
+		//P_FREE($2);
 		(yyval.symbol_info) = next_node;
 		//print_symbols(next_node);
         ;}
@@ -2674,7 +2674,7 @@ yyreduce:
 	  memcpy(next_node->param_list[next_node->no_param].param_type, temp_symbol_info->symbol_name, strlen(temp_symbol_info->symbol_name));
 	  next_node->no_param++;
 	  (yyval.param_list) = next_node;
-	  P_FREE((yyvsp[(1) - (1)].symbol_info));
+	  //P_FREE($1);
 	;}
     break;
 
@@ -2687,7 +2687,7 @@ yyreduce:
 	  memcpy(next_node->param_list[next_node->no_param].param_type, temp_symbol_info->symbol_name, strlen(temp_symbol_info->symbol_name));
 	  next_node->no_param++;
 	  (yyval.param_list) = next_node;
-	  P_FREE((yyvsp[(3) - (3)].symbol_info));
+	  //P_FREE($3);
         ;}
     break;
 
@@ -2718,8 +2718,8 @@ yyreduce:
     {
 		//abstract declarator usually used in runtime, we can not check it by using static analyzer
 		//$$ = NULL;
-		P_FREE((yyvsp[(2) - (4)].symbol_info));
-		P_FREE((yyvsp[(4) - (4)].symbol_info));
+		//P_FREE($2);
+		//P_FREE($4);
 	;}
     break;
 

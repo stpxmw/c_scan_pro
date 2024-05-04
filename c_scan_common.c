@@ -362,8 +362,8 @@ void* pd_free(void *ptr)
     }
     if (NULL NEQ (((SYMBOL_INFO_T*)temp_ptr)->symbol_name) ){
         //const char* do not need to free by hands
-        RW_FREE( (((SYMBOL_INFO_T*)temp_ptr)->symbol_name) );
-        memset(  &(((SYMBOL_INFO_T*)temp_ptr)->symbol_name) ,ZERO,sizeof(char*));
+        RW_FREE( ((SYMBOL_INFO_T*)temp_ptr)->symbol_name );
+        memset( &(((SYMBOL_INFO_T*)temp_ptr)->symbol_name) ,ZERO,sizeof(char*));
     }
     //we clean it to zero
     memset(temp_ptr,ZERO,sizeof(SYMBOL_INFO_T));

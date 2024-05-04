@@ -256,13 +256,13 @@ declaration_specifiers
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			//free buffer for current node
-                        P_FREE($1);
-                        P_FREE($$);
+                        //P_FREE($1);
+                        //P_FREE($$);
 		} else {
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			//free buffer for current node
-			P_FREE($1);
-			P_FREE($$);
+			//P_FREE($1);
+			//P_FREE($$);
 		}
 		$$ = next_node;
 
@@ -291,16 +291,16 @@ declaration_specifiers
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 			//free buffer for current node
-                        P_FREE($1);
-                        P_FREE($2);
-                        P_FREE($$);
+                        //P_FREE($1);
+                        //P_FREE($2);
+                        //P_FREE($$);
 		} else {
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 			//free buffer for current node
-			P_FREE($1);
-			P_FREE($2);
+			//P_FREE($1);
+			//P_FREE($2);
 		}
 		$$ = next_node;
 
@@ -322,7 +322,7 @@ declaration_specifiers
 		memset(next_node->symbol_name, 0, MAX_SYMBOL_LEN);
 		SYMBOL_INFO_T* cur_node = $1;
 		strcat(next_node->symbol_name,cur_node->symbol_name);
-		P_FREE($1);
+		//P_FREE($1);
 		$$ = next_node;
         	if ((NULL NEQ next_node) && (NULL NEQ next_node->symbol_name) )
         	{
@@ -349,16 +349,16 @@ declaration_specifiers
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 			//free buffer for current node
-                        P_FREE($1);
-                        P_FREE($2);
-                        P_FREE($$);
+                        //P_FREE($1);
+                        //P_FREE($2);
+                        //P_FREE($$);
 		} else {
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 			//free buffer for current node
-			P_FREE($1);
-			P_FREE($2);
+			//P_FREE($1);
+			//P_FREE($2);
 		}
 		$$ = next_node;
 
@@ -392,16 +392,16 @@ declaration_specifiers
         			strcat(next_node->symbol_name," ");
         			strcat(next_node->symbol_name,cur_node2->symbol_name);
         			//free buffer for current node
-                                P_FREE($1);
-                                P_FREE($2);
-                                P_FREE($$);
+                                //P_FREE($1);
+                                //P_FREE($2);
+                                //P_FREE($$);
         		} else {
         			strcat(next_node->symbol_name,cur_node->symbol_name);
         			strcat(next_node->symbol_name," ");
         			strcat(next_node->symbol_name,cur_node2->symbol_name);
         			//free buffer for current node
-        			P_FREE($1);
-        			P_FREE($2);
+        			//P_FREE($1);
+        			//P_FREE($2);
         		}
         		$$ = next_node;
 
@@ -592,7 +592,7 @@ direct_declarator
 		next_node->fun_type = FUN_NO_FUNC;
 		next_node->fun_name = strdup(temp_id->symbol_name);
 		$$ = next_node;
-		P_FREE($1);
+		//P_FREE($1);
 	}
 	| '(' declarator ')'
 	{
@@ -625,8 +625,8 @@ direct_declarator
 #endif
 		$$ = next_node;
 		RW_FREE($1);
-		P_FREE($2);
-		P_FREE($4);
+		//P_FREE($2);
+		//P_FREE($4);
 	}
 	| direct_declarator '(' identifier_list ')'
 	{
@@ -675,7 +675,7 @@ pointer
 		 strcat(next_node->symbol_name,temp_symbol_info->symbol_name);
 		 ASSIGN_SYMBOL_LOC(next_node,temp_symbol_info);
 		 $$ = next_node;
-		 P_FREE($1);
+		 //P_FREE($1);
 	}
 	| '*' type_qualifier_list
 	{
@@ -694,8 +694,8 @@ pointer
                  strcat(next_node->symbol_name,temp_symbol_info2->symbol_name);
         	 ASSIGN_SYMBOL_LOC(next_node,temp_symbol_info2);
         	 $$ = next_node;
-        	 P_FREE($1);
-        	 P_FREE($2);
+        	 //P_FREE($1);
+        	 //P_FREE($2);
 
 	}
 	| '*' type_qualifier_list pointer
@@ -712,8 +712,8 @@ pointer
                           strcat(next_node->symbol_name,temp_symbol_info2->symbol_name);
                  	 ASSIGN_SYMBOL_LOC(next_node,temp_symbol_info2);
                  	 $$ = next_node;
-                 	 P_FREE($1);
-                 	 P_FREE($3);
+                 	 //P_FREE($1);
+                 	 //P_FREE($3);
 	}
 	;
 
@@ -743,7 +743,7 @@ parameter_list
 		memcpy(param_list->param_list[param_list->no_param].param_type,temp_symbol_info->symbol_name,strlen(temp_symbol_info->symbol_name));
 		param_list->no_param++;
 		$$ = param_list;
-		P_FREE($1);
+		//P_FREE($1);
 
 	}
 	| parameter_list ',' parameter_declaration
@@ -780,7 +780,7 @@ parameter_declaration
                 			strcat(next_node->symbol_name," ");
                                         strcat(next_node->symbol_name,cur_node2->point_str);
                 		}
-                		P_FREE($1);
+                		//P_FREE($1);
                 		$$ = next_node;
                 		//print_symbols(next_node);
 #ifdef BISON_DEBUG
@@ -808,8 +808,8 @@ parameter_declaration
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 		}
 
-		P_FREE($1);
-		P_FREE($2);
+		//P_FREE($1);
+		//P_FREE($2);
 		$$ = next_node;
 		//print_symbols(next_node);
         }
@@ -828,7 +828,7 @@ identifier_list
 	  memcpy(next_node->param_list[next_node->no_param].param_type, temp_symbol_info->symbol_name, strlen(temp_symbol_info->symbol_name));
 	  next_node->no_param++;
 	  $$ = next_node;
-	  P_FREE($1);
+	  //P_FREE($1);
 	}
 	| identifier_list ',' IDENTIFIER
 	{
@@ -838,7 +838,7 @@ identifier_list
 	  memcpy(next_node->param_list[next_node->no_param].param_type, temp_symbol_info->symbol_name, strlen(temp_symbol_info->symbol_name));
 	  next_node->no_param++;
 	  $$ = next_node;
-	  P_FREE($3);
+	  //P_FREE($3);
         }
 	;
 
@@ -878,8 +878,8 @@ direct_abstract_declarator
 	{
 		//abstract declarator usually used in runtime, we can not check it by using static analyzer
 		//$$ = NULL;
-		P_FREE($2);
-		P_FREE($4);
+		//P_FREE($2);
+		//P_FREE($4);
 	}
 	;
 

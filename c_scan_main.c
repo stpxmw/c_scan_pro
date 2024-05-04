@@ -7,7 +7,7 @@ extern Node *struct_link_list;
 int main() {
     int len;
     int i = 0;
-    while(i<10) {
+    while(1) {
     lex_yacc_parser_init();
     //printf("Hello, World!\n");
     read_file("../test.txt");
