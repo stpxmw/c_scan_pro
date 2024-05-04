@@ -33,7 +33,7 @@ typedef struct {
     int alloc_line;
     SYMBOL_INFO_T t;
 }MEMORY_UNIT;
-
+void testss(strccc1, stete2);
 void read_file(const char* path);
 void lex_yacc_parser_init(void);
 void lex_yacc_parser_deinit(void);
@@ -56,4 +56,5 @@ int* main() {
     printf("len %d \n", len);
     lex_yacc_parser_deinit();
     return 0;
+    memset(&(p->param_list), ZERO, sizeof(int*));
 }

@@ -220,22 +220,25 @@ declaration
 			printf("function type is \"%d\"\n", tem_fuc_trace->fun_type);
 			printf("ret TYPE is \"%s\"\n", next_node->ret_value_type);
 
-			$$ = next_node;
+			//$$ = next_node;
+			FREE_AST_NODE(next_node);
 
 		} else { // this is struct or other state reduce like struct declare, we can not add all struct to it
-			SYMBOL_INFO_T *temp_symbol_info = $2;
-                        printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->symbol_name );
-                        if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
+			Function_D *temp_symbol_info = $2;
+                        printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->fun_name );
+                        if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->fun_name) )
                         {
 				if( (strcmp(temp_symbol_info0->symbol_name, "typedef struct") == 0)
 				  ||(strcmp(temp_symbol_info0->symbol_name, "struct") == 0) ){
-					insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+					insertAtHead(&struct_link_list,temp_symbol_info->fun_name);
 #ifdef BISON_DEBUG
-                        		printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->symbol_name );
+                        		printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->fun_name );
 #endif
-				 $$ = $2;
+				 //$$ = $2;
 				 }
                         }
+                        FREE_FUNC_D_NODE($2);
+                        //RW_FREE(temp_symbol_info);
 		}
 	}
 	;
@@ -579,7 +582,7 @@ declarator
 	{
 		Function_D *temp_func_d = $1;
 		temp_func_d->is_ret_val_point = 0;
-		$$ = temp_func_d;
+		$$ = $1;
 	}
 	;
 
@@ -588,6 +591,7 @@ direct_declarator
 	: IDENTIFIER
 	{
 		Function_D* next_node =(Function_D*)RW_MALLOC(sizeof(Function_D));
+		memset(next_node,ZERO,sizeof(Function_D));
 		SYMBOL_INFO_T *temp_id  = $1;
 		next_node->fun_type = FUN_NO_FUNC;
 		next_node->fun_name = strdup(temp_id->symbol_name);
@@ -597,6 +601,7 @@ direct_declarator
 	| '(' declarator ')'
 	{
 	 //currently we do not support like ----void *test(int(*Test2)(int a, int b) )-----
+
 	}
 
 	| direct_declarator '[' type_qualifier_list assignment_expression ']'
@@ -610,11 +615,11 @@ direct_declarator
 	| direct_declarator '(' parameter_type_list ')'
 	{
 		Param_t_list *temp_param_list = $3;//$1 is function name ;$3 is the fuction params
-		SYMBOL_INFO_T *temp_symbol_info = $1;
+		Function_D *temp_symbol_info = $1;
 		Function_D* next_node = (Function_D*)RW_MALLOC(sizeof(Function_D));
 		memset(next_node,ZERO,sizeof(Function_D));
 		next_node->param_list = temp_param_list;
-		next_node->fun_name = temp_symbol_info->symbol_name;
+		next_node->fun_name = temp_symbol_info->fun_name;
 		next_node->fun_type = FUN_IS_FUNC_BUT_UNKOWN_TYPE;
 		//printf("FUN_IS_FUNC --> \"%s\"\n",next_node->fun_name ); //this is the only function decl
 		if ((NULL NEQ temp_param_list) && (NULL NEQ temp_param_list->param_list) )
@@ -632,11 +637,11 @@ direct_declarator
 	{
 {
 		Param_t_list *temp_param_list = $3;//$1 is function name ;$3 is the fuction params
-		SYMBOL_INFO_T *temp_symbol_info = $1;
+		Function_D* temp_symbol_info = $1;
 		Function_D* next_node = (Function_D*)RW_MALLOC(sizeof(Function_D));
 		memset(next_node,ZERO,sizeof(Function_D));
 		next_node->param_list = temp_param_list;
-		next_node->fun_name = temp_symbol_info->symbol_name;
+		next_node->fun_name = temp_symbol_info->fun_name;
 		next_node->fun_type = FUN_IS_FUNC_BUT_UNKOWN_TYPE;
 		printf("parameter_type_list:get token \"%s\"\n",next_node->fun_name ); //this is the only function decl
 		if ((NULL NEQ temp_param_list) && (NULL NEQ temp_param_list->param_list) )
@@ -652,10 +657,10 @@ direct_declarator
 
 	| direct_declarator '(' ')'
 	{
-		SYMBOL_INFO_T *temp_symbol_info = $1;
+		Function_D *temp_symbol_info = $1;
 		Function_D* next_node = (Function_D*)RW_MALLOC(sizeof(Function_D));
 		memset(next_node,ZERO,sizeof(Function_D));
-		next_node->fun_name = temp_symbol_info->symbol_name;
+		next_node->fun_name = temp_symbol_info->fun_name;
 		next_node->fun_type = FUN_IS_FUNC_BUT_UNKOWN_TYPE;
 #ifdef BISON_DEBUG
 		 //printf("function without params:\"%s\"\n",next_node->fun_name ); //this is the only function decl
@@ -767,21 +772,21 @@ parameter_declaration
                 		Function_D *cur_node2 = $2;
 
                 		SYMBOL_INFO_T *next_node = (SYMBOL_INFO_T *)P_MALLOCA;
-                		memset(next_node,0,sizeof(SYMBOL_INFO_T));
+                		memset(next_node,ZERO,sizeof(SYMBOL_INFO_T));
 
                 		next_node->symbol_name = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
                 		if (NULL EQ next_node->symbol_name) {
-                			assert(0);
+                			assert(ZERO);
                 		}
-                		memset(next_node->symbol_name, 0, MAX_SYMBOL_LEN);
+                		memset(next_node->symbol_name, ZERO, MAX_SYMBOL_LEN);
 
                 		strcat(next_node->symbol_name,cur_node1->symbol_name);
                 		if (1 EQ cur_node2->is_ret_val_point ) {
                 			strcat(next_node->symbol_name," ");
                                         strcat(next_node->symbol_name,cur_node2->point_str);
                 		}
-                		//P_FREE($1);
                 		$$ = next_node;
+                		FREE_FUNC_D_NODE($2);
                 		//print_symbols(next_node);
 #ifdef BISON_DEBUG
 
@@ -794,16 +799,16 @@ parameter_declaration
 		SYMBOL_INFO_T *cur_node1 = $1;
 		SYMBOL_INFO_T *cur_node2 = $2;
 		SYMBOL_INFO_T *next_node = (SYMBOL_INFO_T *)P_MALLOCA;
-		memset(next_node,0,sizeof(SYMBOL_INFO_T));
+		memset(next_node,ZERO,sizeof(SYMBOL_INFO_T));
 
 		next_node->symbol_name = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
 		if (NULL EQ next_node->symbol_name) {
-			assert(0);
+			assert(ZERO);
 		}
-		memset(next_node->symbol_name, 0, MAX_SYMBOL_LEN);
+		memset(next_node->symbol_name, ZERO, MAX_SYMBOL_LEN);
 
 		strcat(next_node->symbol_name,cur_node1->symbol_name);
-		if (0 EQ memcmp(cur_node2->symbol_name,"*",1) ) {
+		if (ZERO EQ memcmp(cur_node2->symbol_name,"*",1) ) {
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 		}
@@ -873,13 +878,17 @@ direct_abstract_declarator
 	| direct_abstract_declarator '[' '*' ']'
 	| '(' ')'
 	| '(' parameter_type_list ')'
+	{
+		assert(0);
+		RW_FREE($2);
+	}
 	| direct_abstract_declarator '(' ')'
 	| direct_abstract_declarator '(' parameter_type_list ')'
 	{
 		//abstract declarator usually used in runtime, we can not check it by using static analyzer
-		//$$ = NULL;
-		//P_FREE($2);
-		//P_FREE($4);
+		//but we need to free buffer
+		assert(0);
+		RW_FREE($3);
 	}
 	;
 
@@ -1002,7 +1011,7 @@ function_definition
 	assert(0);
 	}
 	| declaration_specifiers declarator compound_statement
-{
+	{
 	/* $1 means ret type, $2 means init param list and fuction name may be also have "*" */
 	Function_D *tem_fuc_trace = $2;
 	SYMBOL_INFO_T *temp_symbol_info0 = $1;
@@ -1041,21 +1050,26 @@ function_definition
 		printf("TYPE is \"%d\"\n", tem_fuc_trace->fun_type);
 		printf("ret TYPE is \"%s\"\n", next_node->ret_value_type);
 		$$ = next_node;
-	} else { // this is struct or other state reduce
-		SYMBOL_INFO_T *temp_symbol_info = $2;
-		printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->symbol_name );
-		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
+	} else { // this is struct or other state reduce and it is also func
+		//this will not reach
+		assert(0);
+
+		Function_D *temp_symbol_info = $2;
+		printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->fun_name );
+		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->fun_name) )
 		{
 			if( (strcmp(temp_symbol_info0->symbol_name, "typedef struct") == 0)
 			  ||(strcmp(temp_symbol_info0->symbol_name, "struct") == 0) ){
 
-				insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+				insertAtHead(&struct_link_list,temp_symbol_info->fun_name);
 #ifdef BISON_DEBUG
-				printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->symbol_name );
+				printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->fun_name );
 #endif
 			 $$ = $2;
 			 }
 		}
+		FREE_FUNC_D_NODE($2);
+
 	}
 }
 	;

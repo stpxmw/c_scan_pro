@@ -14,26 +14,47 @@ unsigned char* last_search_location = ZERO;//we use this flag to speed up memory
 
 Node *struct_link_list = NULL; //define the struct or enum or union list, which used for parse c.i, when finish the parse of one file, this link should be free
 
+void rel_func_d_node(Function_D *p)
+{
+    if (NULL NEQ p)
+    {
+        if(NULL NEQ p->param_list)
+        {
+            RW_FREE(p->param_list);
+            memset(&(p->param_list), ZERO, sizeof(Param_t_list*));
+        }
+        if (NULL NEQ p->fun_name)
+        {
+            RW_FREE(p->fun_name);
+            memset(&(p->fun_name), ZERO, sizeof(char*));
+        }
+    RW_FREE(p);
+    memset(&(p), ZERO, sizeof(Function_D*));
+    }
+}
+
 void rel_ast_node_buffer(Function_Pre *p)
 {
     if (NULL NEQ p)
     {
         if(NULL NEQ p->ret_value_type) {
             RW_FREE(p->ret_value_type);
-            memset(&p->ret_value_type, ZERO, sizeof(char *));
+            memset(&(p->ret_value_type), ZERO, sizeof(char *));
         }
         if (NULL NEQ p->function_d) {
             if (NULL NEQ p->function_d->fun_name) {
                 RW_FREE(p->function_d->fun_name);
-                memset(&p->function_d->fun_name, ZERO, sizeof(char *));
+                memset(&(p->function_d->fun_name), ZERO, sizeof(char *));
             }
             if (NULL NEQ p->function_d->param_list) {
                 RW_FREE(p->function_d->param_list);
-                memset(&p->function_d->param_list, ZERO, sizeof(Param_t_list));
+                memset(&(p->function_d->param_list), ZERO, sizeof(Param_t_list*));
             }
             RW_FREE(p->function_d);
+            memset(&(p->function_d), ZERO, sizeof(Function_D*));
         }
         RW_FREE(p);
+        memset(&p, ZERO, sizeof(Function_Pre*));
     } else{
         printf("point is NULL, don't rel\n");
     }

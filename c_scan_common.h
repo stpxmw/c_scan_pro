@@ -27,6 +27,7 @@
 
 #define ASSIGN_SYMBOL_LOC assign_symbol_loc
 #define FREE_AST_NODE rel_ast_node_buffer
+#define FREE_FUNC_D_NODE rel_func_d_node
 
 typedef enum {
     ENUM_TYPEDEF,
@@ -121,4 +122,5 @@ void print_symbols(SYMBOL_INFO_T* p);
 void print_params(Param_t_list *p);
 void assign_symbol_loc(SYMBOL_INFO_T* dest, SYMBOL_INFO_T* src);
 void rel_ast_node_buffer(Function_Pre *p);
+void rel_func_d_node(Function_D *p);
 #endif //C_SCAN_C_SCAN_COMMON_H
