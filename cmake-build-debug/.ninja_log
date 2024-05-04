@@ -1,18 +1,15 @@
 # ninja log v5
-8	48	1714826520312508091	CMakeFiles/c_scan_pro.dir/c_scan_main.c.o	c2beb8d1ad74f5d2
+1	24	1714827398618243032	CMakeFiles/c_scan_pro.dir/c_scan_main.c.o	c2beb8d1ad74f5d2
 1	36	1714826823996876187	CMakeFiles/commom_lib.dir/c_scan_common.c.o	1a3f1b7d881e2d22
 1	26	1714643172452733687	CMakeFiles/c_scan_pro.dir/main.c.o	90e96a4474ae420f
-1	107	1714827281724584566	build.ninja	150639269e95e31b
+0	264	1714827904190144180	build.ninja	150639269e95e31b
 75	94	1714826520359752000	liblex_parser.a	c0339b96de8e4756
 0	5	0	clean	ad90e366ad70d77b
 37	56	1714826824017834000	libcommom_lib.a	c9c7b23db47c6ca4
-56	88	1714826824048770865	c_scan_pro	6d09f1b48f572842
+24	56	1714827398650646464	c_scan_pro	6d09f1b48f572842
 8	73	1714826520337321330	CMakeFiles/yacc_parser.dir/c_scan.tab.c.o	e3ea95c103da1c16
 74	94	1714826520359568000	libyacc_parser.a	d3668b3b3f1ead0d
 1	23	1714826458580088179	/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c	72d6709d21b1461e
 8	74	1714826520338435159	CMakeFiles/lex_parser.dir/lex.yy.c.o	8a76a6092ebfbb5d
 2	36	1714825095989761521	/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c	109b3b4a22838287
 2	36	1714825095989761521	/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.h	109b3b4a22838287
-0	264	1714827281724584566	build.ninja	150639269e95e31b
-1	24	1714827398618243032	CMakeFiles/c_scan_pro.dir/c_scan_main.c.o	c2beb8d1ad74f5d2
-24	56	1714827398650646464	c_scan_pro	6d09f1b48f572842
