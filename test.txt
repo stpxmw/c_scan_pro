@@ -1,13 +1,25 @@
+
+extern int __sprintf_chk (char * , int, long unsigned int,
+     const char * , ...);
+
+ void main_noparam(){
+
+ }
+
 typedef struct Node {
     char* data;
     struct Node* next;
-}Node;
+} Node;
 
-typedef struct  {
+struct Node5{
+    char* data22;
+    struct Node* next22;
+}Node6;
+
+typedef struct test2 {
     int val_int;
     char *val_char;
 }VALUE;
-
 
 typedef struct {
     char* symbol_name;//attention! this field must be free before MEMORY_UNIT
@@ -21,6 +33,7 @@ typedef struct {
     int alloc_line;
     SYMBOL_INFO_T t;
 }MEMORY_UNIT;
+
 void read_file(const char* path);
 void lex_yacc_parser_init(void);
 void lex_yacc_parser_deinit(void);
@@ -29,9 +42,9 @@ void p_memory_deinit(void);
 void memory_leak_check(void);
 void* pd_malloc(int line);
 void* pd_free(void * ptr);
-Node* createNode(char* data);
+Node** createNode(char* data);
 void insertAtHead(Node** head, char* data);
-void deleteNode(Node** head, char* data);
+void* deleteNode(Node** head, char* data);
 void printList(Node* head);
 int main() {
     int len;

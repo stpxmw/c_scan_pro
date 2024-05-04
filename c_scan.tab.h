@@ -174,12 +174,15 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 13 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 14 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 {
 	struct SYMBOL_INFO_T *symbol_info;
+	struct Param_t_list *param_list;
+	struct Function_D *function_d;
+	struct Function_Pre *function_pre;
 }
 /* Line 1529 of yacc.c.  */
-#line 183 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.h"
+#line 186 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

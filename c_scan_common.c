@@ -12,8 +12,36 @@ unsigned char* first_search_location = ZERO;
 unsigned char* search_location = ZERO;//we use this flag to speed up memory search
 unsigned char* last_search_location = ZERO;//we use this flag to speed up memory search
 
-Node *struct_link_list = NULL;
+Node *struct_link_list = NULL; //define the struct or enum or union list, which used for parse c.i, when finish the parse of one file, this link should be free
 
+void assign_symbol_loc(SYMBOL_INFO_T* dest, SYMBOL_INFO_T* src)
+{
+   dest->no_name =  src->no_name;
+   dest->column = src->column;
+   dest->lineno  = src->lineno;
+}
+
+void print_params(Param_t_list *p)
+{
+    printf("START PRINT PARAMS --> ");
+    int no = p->no_param;
+    int i = 0;
+    for (i = 0;i< no;i++)
+    {
+        printf("%s |",p->param_list[i].param_type);
+    }
+    printf("\n");
+}
+
+void print_symbols(SYMBOL_INFO_T* p)
+{
+    if ( (p NEQ NULL) && (NULL NEQ p->symbol_name))
+    {
+        printf("symbol name is \"%s\" \n", p->symbol_name);
+    }else{
+        printf("point is NULL! \n");
+    }
+}
 
 Node* createNode(char* data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
@@ -133,6 +161,7 @@ void print_item_name(char *ptr,int len)
 void memory_leak_check(void)
 {
     unsigned char *check_mem_ptr = NULL;
+    int leak_num = 0;
     check_mem_ptr = first_search_location;
     while (check_mem_ptr <= last_search_location)
     {
@@ -144,9 +173,11 @@ void memory_leak_check(void)
             printf("|---");
             printf("symbol location is : line:%d, col:%d ",((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->lineno,((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->column);
             printf("\n");
+            leak_num++;
         }
         check_mem_ptr += MEMORY_UNIT_SIZE;
     }
+    printf("Total leak num is %d\n", leak_num);
 }
 
 

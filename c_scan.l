@@ -11,7 +11,7 @@ IS                      ((u|U)|(u|U)?(l|L|ll|LL)|(l|L|ll|LL)(u|U))
 #include <assert.h>
 #include "c_scan.tab.h"
 #include "c_scan_common.h"
-void count( );
+void count( int  );
 void comment();
 
 void* pd_malloc();
@@ -180,14 +180,16 @@ void count(int not_need_record_flag)
         temp_info->lineno = lineno;
         temp_info->column = column;
         len = strlen(yytext);
-        temp_info->symbol_name = strdup(yytext);
+
+        temp_info->symbol_name = (char*)RW_MALLOC(MAX_SYMBOL_LEN);
         if (NULL EQ temp_info->symbol_name){
             assert(0);
         }
+        memset(temp_info->symbol_name, 0, MAX_SYMBOL_LEN);
         memcpy(temp_info->symbol_name,yytext,len);
         temp_info->no_name = len;
 #ifdef FLEX_DEBUG
-        printf("FLEX DEBUG READ TOKEN: \" %s \" \n",yytext);
+        printf("FLEX DEBUG READ TOKEN: \"%s\"\n",yytext);
 #endif
         yylval.symbol_info =temp_info;
     }

@@ -4,13 +4,15 @@
 #include "stdio.h"
 #include "c_scan_main.h"
 
-#define MAX_SYMBOLS_NUM 100000
+#define MAX_SYMBOLS_NUM 2000000
 #define MEMORY_USED 0xFFFFEEEE
 #define MEMORY_UNUSED 0xEEEEFFFF
 #define MEMORY_UNIT_SIZE sizeof(MEMORY_UNIT)
 #define EQ ==
 #define NEQ !=
 #define ZERO 0
+#define MAX_FUN_PARAM_NUM 10
+#define MAX_SYMBOL_LEN 50
 
 #define RW_MALLOC malloc
 #define RW_FREE free
@@ -23,7 +25,52 @@
 #define P_FREE free
 #endif
 
+#define ASSIGN_SYMBOL_LOC assign_symbol_loc
 
+typedef enum {
+    ENUM_TYPEDEF,
+    ENUM_ENUM,
+    ENUM_STRUCT,
+    ENUM_UNION,
+}AST_t;
+
+typedef struct {
+    char * file_name;
+    int line;
+    int column;
+}Func_Loc_t;
+
+typedef struct {
+    int is_pointer;
+    char param_type[MAX_SYMBOL_LEN];
+}Param_t;
+
+typedef enum {
+    FUN_NO_FUNC,
+    FUN_IS_FUNC_BUT_UNKOWN_TYPE,
+    FUN_DEFINE,
+    FUN_DECLARATON,
+    FUN_CALL
+}Fun_Type_t;
+
+typedef struct {
+    int no_param;
+    Param_t param_list[MAX_FUN_PARAM_NUM];
+}Param_t_list;
+
+typedef struct Function_D {
+    char* fun_name;
+    Fun_Type_t fun_type;
+    Param_t_list *param_list;
+    int is_ret_val_point;
+    char point_str[MAX_SYMBOL_LEN];
+} Function_D;
+
+typedef struct Function_Pre {
+    char* ret_value_type;
+    Function_D *function_d;
+    Func_Loc_t fun_location_desc;
+} Function_Pre;
 
 typedef struct Node {
     char* data;
@@ -32,7 +79,7 @@ typedef struct Node {
 
 typedef struct {
     int val_int;
-    char *val_char;
+    char *vval_charal_char;
 }VALUE;
 
 typedef struct {
@@ -68,5 +115,8 @@ void insertAtHead(Node** head, char* data);
 void deleteNode(Node** head, char* data);
 void printList(Node* head);
 Node* findNode(Node* head, char* data);
+void print_symbols(SYMBOL_INFO_T* p);
+void print_params(Param_t_list *p);
+void assign_symbol_loc(SYMBOL_INFO_T* dest, SYMBOL_INFO_T* src);
 
 #endif //C_SCAN_C_SCAN_COMMON_H
