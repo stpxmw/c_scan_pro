@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 project(c_scan_pro C)
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak")
 
 # 查找Yacc和Lex工具
 find_package(BISON)

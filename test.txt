@@ -46,7 +46,7 @@ Node** createNode(char* data);
 void insertAtHead(Node** head, char* data);
 void* deleteNode(Node** head, char* data);
 void printList(Node* head);
-int main() {
+int* main() {
     int len;
     lex_yacc_parser_init();
     //printf("Hello, World!\n");

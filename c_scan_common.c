@@ -14,6 +14,32 @@ unsigned char* last_search_location = ZERO;//we use this flag to speed up memory
 
 Node *struct_link_list = NULL; //define the struct or enum or union list, which used for parse c.i, when finish the parse of one file, this link should be free
 
+void rel_ast_node_buffer(Function_Pre *p)
+{
+    if (NULL NEQ p)
+    {
+        if(NULL NEQ p->ret_value_type) {
+            RW_FREE(p->ret_value_type);
+            memset(&p->ret_value_type, ZERO, sizeof(char *));
+        }
+        if (NULL NEQ p->function_d) {
+            if (NULL NEQ p->function_d->fun_name) {
+                RW_FREE(p->function_d->fun_name);
+                memset(&p->function_d->fun_name, ZERO, sizeof(char *));
+            }
+            if (NULL NEQ p->function_d->param_list) {
+                RW_FREE(p->function_d->param_list);
+                memset(&p->function_d->param_list, ZERO, sizeof(Param_t_list));
+            }
+            RW_FREE(p->function_d);
+        }
+        RW_FREE(p);
+    } else{
+        printf("point is NULL, don't rel\n");
+    }
+}
+
+
 void assign_symbol_loc(SYMBOL_INFO_T* dest, SYMBOL_INFO_T* src)
 {
    dest->no_name =  src->no_name;
@@ -96,11 +122,18 @@ void deleteNode(Node** head, char* data) {
     }
 }
 
-// 向链表中插入节点
-void insertNode(Node** head, void* data) {
-    Node* newNode = createNode(data);
-    newNode->next = *head;
-    *head = newNode;
+void freeList(Node* head) {
+    Node* current = head->next;
+    Node* next = NULL;
+    char* data = NULL;
+    while (current != NULL) {
+        next = current->next;
+        data = current->data;
+        RW_FREE(data);
+        RW_FREE(current);
+        current = next;
+    }
+    head->next = NULL;
 }
 
 void printList(Node* head) {
@@ -167,14 +200,19 @@ void memory_leak_check(void)
     {
         if ( MEMORY_USED EQ *((int *)check_mem_ptr) )
         {
+#ifndef MEMORY_AUTO_REL
             printf("warning! memory not released! may cause mem leak! :%p",check_mem_ptr);
             printf("   line: %d str name:---|",*((int *)(check_mem_ptr + sizeof(int))));
             print_item_name(((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->symbol_name,((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->no_name);
             printf("|---");
             printf("symbol location is : line:%d, col:%d ",((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->lineno,((SYMBOL_INFO_T *)(check_mem_ptr + 2*sizeof(int)))->column);
             printf("\n");
+#endif
             leak_num++;
         }
+#ifdef MEMORY_AUTO_REL
+        P_FREE(check_mem_ptr+2*sizeof(int));
+#endif
         check_mem_ptr += MEMORY_UNIT_SIZE;
     }
     printf("Total leak num is %d\n", leak_num);
@@ -182,7 +220,7 @@ void memory_leak_check(void)
 
 
 void p_memory_deinit(void){
-    free(inital_memory);
+    RW_FREE(inital_memory);
 }
 
 void lex_yacc_parser_init(void)

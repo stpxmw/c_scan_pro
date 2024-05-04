@@ -20,10 +20,10 @@ extern Node *struct_link_list;
 
 %type <symbol_info> IDENTIFIER CONSTANT EXTERN STRUCT CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID UNION
 %type <symbol_info> type_specifier declaration_specifiers  struct_or_union storage_class_specifier
-%type <symbol_info>  parameter_declaration abstract_declarator type_qualifier function_specifier pointer '*' function_definition '(' ')'
+%type <symbol_info>  parameter_declaration abstract_declarator type_qualifier function_specifier pointer '*' '(' ')'
 %type <param_list> parameter_list parameter_type_list direct_abstract_declarator identifier_list
 %type <function_d> direct_declarator declarator init_declarator_list init_declarator
-%type <function_pre> declaration
+%type <function_pre> declaration function_definition external_declaration translation_unit
 
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
@@ -208,17 +208,27 @@ declaration
 				strcat(next_node->ret_value_type," ");
 				strcat(next_node->ret_value_type,tem_fuc_trace->point_str);
 			}
+			if (FUN_IS_FUNC_BUT_UNKOWN_TYPE NEQ tem_fuc_trace->fun_type)
+			{
+				assert(0);
+			} else {
+				tem_fuc_trace->fun_type = FUN_DECLARATON;
+			}
+
+			printf("FUCTION_NAME:%s\n",tem_fuc_trace->fun_name);
+			print_params(tem_fuc_trace->param_list);
+			printf("function type is \"%d\"\n", tem_fuc_trace->fun_type);
+			printf("ret TYPE is \"%s\"\n", next_node->ret_value_type);
 
 			$$ = next_node;
-			printf("ret TYPE is \"%s\"\n", next_node->ret_value_type);
-		} else { // this is struct or other state reduce
+
+		} else { // this is struct or other state reduce like struct declare, we can not add all struct to it
 			SYMBOL_INFO_T *temp_symbol_info = $2;
                         printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->symbol_name );
                         if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
                         {
 				if( (strcmp(temp_symbol_info0->symbol_name, "typedef struct") == 0)
 				  ||(strcmp(temp_symbol_info0->symbol_name, "struct") == 0) ){
-
 					insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
 #ifdef BISON_DEBUG
                         		printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->symbol_name );
@@ -606,11 +616,11 @@ direct_declarator
 		next_node->param_list = temp_param_list;
 		next_node->fun_name = temp_symbol_info->symbol_name;
 		next_node->fun_type = FUN_IS_FUNC_BUT_UNKOWN_TYPE;
-		printf("FUN_IS_FUNC --> \"%s\"\n",next_node->fun_name ); //this is the only function decl
+		//printf("FUN_IS_FUNC --> \"%s\"\n",next_node->fun_name ); //this is the only function decl
 		if ((NULL NEQ temp_param_list) && (NULL NEQ temp_param_list->param_list) )
 		{
 #ifdef BISON_DEBUG
-		  print_params(temp_param_list);
+		  //print_params(temp_param_list);
 		}
 #endif
 		$$ = next_node;
@@ -648,11 +658,11 @@ direct_declarator
 		next_node->fun_name = temp_symbol_info->symbol_name;
 		next_node->fun_type = FUN_IS_FUNC_BUT_UNKOWN_TYPE;
 #ifdef BISON_DEBUG
-		 printf("function without params:\"%s\"\n",next_node->fun_name ); //this is the only function decl
+		 //printf("function without params:\"%s\"\n",next_node->fun_name ); //this is the only function decl
 #endif
 		$$ = next_node;
 		RW_FREE($1);
-        	}
+       }
 	;
 pointer
 	: '*'
@@ -966,9 +976,14 @@ translation_unit
 external_declaration
 	: function_definition
 	{
-		P_FREE($1);
+		$$ = $1;
+		FREE_AST_NODE($1);
 	}
 	| declaration
+	{
+		$$ = $1;
+		//FREE_AST_NODE($1);
+	}
 	;
 
 function_definition
@@ -987,10 +1002,62 @@ function_definition
 	assert(0);
 	}
 	| declaration_specifiers declarator compound_statement
+{
+	/* $1 means ret type, $2 means init param list and fuction name may be also have "*" */
+	Function_D *tem_fuc_trace = $2;
+	SYMBOL_INFO_T *temp_symbol_info0 = $1;
+
+	if (tem_fuc_trace->fun_type NEQ FUN_NO_FUNC) //this is function reduce
 	{
+		Function_Pre* next_node =(Function_Pre*)RW_MALLOC(sizeof(Function_Pre) );
+		memset(next_node,0,sizeof(Function_Pre));
+		next_node->function_d = $2;
+		//next_node->fun_location_desc.file_name =
+		//next_node->fun_location_desc.line =
+		//next_node->fun_location_desc.column =
+		next_node->ret_value_type = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
+		memset(next_node->ret_value_type,0,MAX_SYMBOL_LEN);
+		memcpy(next_node->ret_value_type,temp_symbol_info0->symbol_name, strlen(temp_symbol_info0->symbol_name));
+		if(tem_fuc_trace->is_ret_val_point EQ 1)
+		{
+			strcat(next_node->ret_value_type," ");
+			strcat(next_node->ret_value_type,tem_fuc_trace->point_str);
+		}
+		if (FUN_IS_FUNC_BUT_UNKOWN_TYPE NEQ tem_fuc_trace->fun_type)
+		{
+			assert(0);
+		} else {
+			tem_fuc_trace->fun_type = FUN_DEFINE;
+		}
 
+		printf("FUCTION_NAME:%s\n",tem_fuc_trace->fun_name);
+		if (NULL NEQ tem_fuc_trace->param_list)
+		{
+		print_params(tem_fuc_trace->param_list);
+		} else {
+		printf("No params !\n");
+		}
 
+		printf("TYPE is \"%d\"\n", tem_fuc_trace->fun_type);
+		printf("ret TYPE is \"%s\"\n", next_node->ret_value_type);
+		$$ = next_node;
+	} else { // this is struct or other state reduce
+		SYMBOL_INFO_T *temp_symbol_info = $2;
+		printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->symbol_name );
+		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
+		{
+			if( (strcmp(temp_symbol_info0->symbol_name, "typedef struct") == 0)
+			  ||(strcmp(temp_symbol_info0->symbol_name, "struct") == 0) ){
+
+				insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+#ifdef BISON_DEBUG
+				printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->symbol_name );
+#endif
+			 $$ = $2;
+			 }
+		}
 	}
+}
 	;
 
 declaration_list

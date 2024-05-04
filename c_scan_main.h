@@ -1,8 +1,9 @@
 #ifndef C_SCAN_PRO_C_SCAN_MAIN_H
 #define C_SCAN_PRO_C_SCAN_MAIN_H
 
-//#define FAST_MEMORY_MODE 1
-//#define MEMORY_LEAK_CHECK 1
+#define FAST_MEMORY_MODE 1
+#define MEMORY_LEAK_CHECK 1
+#define MEMORY_AUTO_REL 1
 //#define MEMORY_DEBUG 1
 //#define FLEX_DEBUG 1
 #define BISON_DEBUG 1
