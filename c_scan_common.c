@@ -68,6 +68,18 @@ void assign_symbol_loc(SYMBOL_INFO_T* dest, SYMBOL_INFO_T* src)
    dest->lineno  = src->lineno;
 }
 
+void assign_symbol_loc_to_func_d(Function_D* dest, SYMBOL_INFO_T* src)
+{
+    dest->func_loc.line =  src->lineno;
+    dest->func_loc.column = src->column;
+}
+
+void assign__func_d_loc_to_func_d(Function_D* dest, Function_D* src)
+{
+    dest->func_loc.line =  src->func_loc.line;
+    dest->func_loc.column = src->func_loc.column;
+}
+
 void print_params(Param_t_list *p)
 {
     printf("START PRINT PARAMS --> ");

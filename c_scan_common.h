@@ -25,6 +25,8 @@
 #define P_FREE free
 #endif
 
+#define ASSIGN_FUNC_D_LOC_TO_FUNC_D  assign__func_d_loc_to_func_d
+#define ASSIGN_SYMBOL_LOC_TO_FUNC_D assign_symbol_loc_to_func_d
 #define ASSIGN_SYMBOL_LOC assign_symbol_loc
 #define FREE_AST_NODE rel_ast_node_buffer
 #define FREE_FUNC_D_NODE rel_func_d_node
@@ -66,6 +68,7 @@ typedef struct Function_D {
     Param_t_list *param_list;
     int is_ret_val_point;
     char point_str[MAX_SYMBOL_LEN];
+    Func_Loc_t func_loc;
 } Function_D;
 
 typedef struct Function_Pre {
@@ -121,6 +124,8 @@ Node* findNode(Node* head, char* data);
 void print_symbols(SYMBOL_INFO_T* p);
 void print_params(Param_t_list *p);
 void assign_symbol_loc(SYMBOL_INFO_T* dest, SYMBOL_INFO_T* src);
+void assign_symbol_loc_to_func_d(Function_D* dest, SYMBOL_INFO_T* src);
+void assign__func_d_loc_to_func_d(Function_D* dest, Function_D* src);
 void rel_ast_node_buffer(Function_Pre *p);
 void rel_func_d_node(Function_D *p);
 #endif //C_SCAN_C_SCAN_COMMON_H

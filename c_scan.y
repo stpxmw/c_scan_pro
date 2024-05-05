@@ -185,8 +185,6 @@ declaration
 	{
 		Function_Pre* dummy_next_node = (Function_Pre*)RW_MALLOC(sizeof(Function_Pre) );
 		$$ = dummy_next_node;
-		//printf("trace func00 ret:\n");
-        	//print_symbols($1);
 	}
 	| declaration_specifiers init_declarator_list ';'
 	{
@@ -200,8 +198,8 @@ declaration
 			memset(next_node,0,sizeof(Function_Pre));
 			next_node->function_d = $2;
 			//next_node->fun_location_desc.file_name =
-			//next_node->fun_location_desc.line =
-			//next_node->fun_location_desc.column =
+			next_node->fun_location_desc.line =next_node->function_d->func_loc.line;
+			next_node->fun_location_desc.column =next_node->function_d->func_loc.column;
 			next_node->ret_value_type = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
 			memset(next_node->ret_value_type,0,MAX_SYMBOL_LEN);
 			memcpy(next_node->ret_value_type,temp_symbol_info0->symbol_name, strlen(temp_symbol_info0->symbol_name));
@@ -221,9 +219,9 @@ declaration
 			print_params(tem_fuc_trace->param_list);
 			printf("function type is \"%d\"\n", tem_fuc_trace->fun_type);
 			printf("ret TYPE is \"%s\"\n", next_node->ret_value_type);
+			printf("func:line %d, col: %d\n", next_node->fun_location_desc.line,next_node->fun_location_desc.column);
 
 			$$ = next_node;
-			//FREE_AST_NODE(next_node);
 
 		} else { // this is struct or other state reduce like struct declare, we can not add all struct to it
 			Function_D *temp_symbol_info = $2;
@@ -240,7 +238,6 @@ declaration
 				 }
                         }
                         FREE_FUNC_D_NODE($2);
-                        //RW_FREE(temp_symbol_info);
                         Function_Pre* dummy_next_node = (Function_Pre*)RW_MALLOC(sizeof(Function_Pre) );
                         $$ = dummy_next_node;
 
@@ -263,14 +260,8 @@ declaration_specifiers
 			strcat(next_node->symbol_name,old_node->symbol_name);
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node->symbol_name);
-			//free buffer for current node
-                        //P_FREE($1);
-                        //P_FREE($$);
 		} else {
 			strcat(next_node->symbol_name,cur_node->symbol_name);
-			//free buffer for current node
-			//P_FREE($1);
-			//P_FREE($$);
 		}
 		$$ = next_node;
 
@@ -298,17 +289,10 @@ declaration_specifiers
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
-			//free buffer for current node
-                        //P_FREE($1);
-                        //P_FREE($2);
-                        //P_FREE($$);
 		} else {
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
-			//free buffer for current node
-			//P_FREE($1);
-			//P_FREE($2);
 		}
 		$$ = next_node;
 
@@ -330,7 +314,6 @@ declaration_specifiers
 		memset(next_node->symbol_name, 0, MAX_SYMBOL_LEN);
 		SYMBOL_INFO_T* cur_node = $1;
 		strcat(next_node->symbol_name,cur_node->symbol_name);
-		//P_FREE($1);
 		$$ = next_node;
         	if ((NULL NEQ next_node) && (NULL NEQ next_node->symbol_name) )
         	{
@@ -356,17 +339,11 @@ declaration_specifiers
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
-			//free buffer for current node
-                        //P_FREE($1);
-                        //P_FREE($2);
-                        //P_FREE($$);
 		} else {
 			strcat(next_node->symbol_name,cur_node->symbol_name);
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
-			//free buffer for current node
-			//P_FREE($1);
-			//P_FREE($2);
+
 		}
 		$$ = next_node;
 
@@ -400,16 +377,11 @@ declaration_specifiers
         			strcat(next_node->symbol_name," ");
         			strcat(next_node->symbol_name,cur_node2->symbol_name);
         			//free buffer for current node
-                                //P_FREE($1);
-                                //P_FREE($2);
-                                //P_FREE($$);
         		} else {
         			strcat(next_node->symbol_name,cur_node->symbol_name);
         			strcat(next_node->symbol_name," ");
         			strcat(next_node->symbol_name,cur_node2->symbol_name);
-        			//free buffer for current node
-        			//P_FREE($1);
-        			//P_FREE($2);
+
         		}
         		$$ = next_node;
 
@@ -450,6 +422,10 @@ init_declarator
 	 	$$ = $1;
 	}
 	| declarator '=' initializer
+	{
+		$$ = $1;
+	}
+
 	;
 
 storage_class_specifier
@@ -542,8 +518,14 @@ struct_declarator_list
 
 struct_declarator
 	: declarator
+	{
+	  FREE_FUNC_D_NODE($1);
+	}
 	| ':' constant_expression
 	| declarator ':' constant_expression
+	{
+	 FREE_FUNC_D_NODE($1);
+	}
 	;
 
 enum_specifier
@@ -601,31 +583,68 @@ direct_declarator
 		next_node->fun_type = FUN_NO_FUNC;
 		next_node->fun_name = strdup(temp_id->symbol_name);
 		$$ = next_node;
-		//P_FREE($1);
+		ASSIGN_SYMBOL_LOC_TO_FUNC_D($$,$1);
 	}
 	| '(' declarator ')'
 	{
 	 //currently we do not support like ----void *test(int(*Test2)(int a, int b) )-----
-
+	 //we need rel the buffer
+	 FREE_FUNC_D_NODE($2);
+	 $$ = NULL;
 	}
 
 	| direct_declarator '[' type_qualifier_list assignment_expression ']'
+	{
+	 FREE_FUNC_D_NODE($1);
+	 $$ = NULL;
+	}
 	| direct_declarator '[' type_qualifier_list ']'
+	{
+	FREE_FUNC_D_NODE($1);
+	$$ = NULL;
+	}
 	| direct_declarator '[' assignment_expression ']'
+	{
+	FREE_FUNC_D_NODE($1);
+	$$ = NULL;
+	}
 	| direct_declarator '[' STATIC type_qualifier_list assignment_expression ']'
+	{
+	FREE_FUNC_D_NODE($1);
+	$$ = NULL;
+	}
 	| direct_declarator '[' type_qualifier_list STATIC assignment_expression ']'
+	{
+	FREE_FUNC_D_NODE($1);
+	$$ = NULL;
+	}
 	| direct_declarator '[' type_qualifier_list '*' ']'
+	{
+	FREE_FUNC_D_NODE($1);
+	$$ = NULL;
+	}
 	| direct_declarator '[' '*' ']'
+	{
+	FREE_FUNC_D_NODE($1);
+	$$ = NULL;
+	}
+
 	| direct_declarator '[' ']'
+	{
+	FREE_FUNC_D_NODE($1);
+	$$ = NULL;
+	}
 	| direct_declarator '(' parameter_type_list ')'
 	{
 		Param_t_list *temp_param_list = $3;//$1 is function name ;$3 is the fuction params
 		Function_D *temp_symbol_info = $1;
-		Function_D* next_node = (Function_D*)RW_MALLOC(sizeof(Function_D));
+		Function_D *next_node = (Function_D*)RW_MALLOC(sizeof(Function_D));
 		memset(next_node,ZERO,sizeof(Function_D));
 		next_node->param_list = temp_param_list;
 		next_node->fun_name = temp_symbol_info->fun_name;
 		next_node->fun_type = FUN_IS_FUNC_BUT_UNKOWN_TYPE;
+		ASSIGN_FUNC_D_LOC_TO_FUNC_D(next_node,$1);
+
 		//printf("FUN_IS_FUNC --> \"%s\"\n",next_node->fun_name ); //this is the only function decl
 		if ((NULL NEQ temp_param_list) && (NULL NEQ temp_param_list->param_list) )
 		{
@@ -635,8 +654,6 @@ direct_declarator
 #endif
 		$$ = next_node;
 		RW_FREE($1);
-		//P_FREE($2);
-		//P_FREE($4);
 	}
 	| direct_declarator '(' identifier_list ')'
 	{
@@ -648,7 +665,8 @@ direct_declarator
 		next_node->param_list = temp_param_list;
 		next_node->fun_name = temp_symbol_info->fun_name;
 		next_node->fun_type = FUN_IS_FUNC_BUT_UNKOWN_TYPE;
-		printf("parameter_type_list:get token \"%s\"\n",next_node->fun_name ); //this is the only function decl
+		ASSIGN_FUNC_D_LOC_TO_FUNC_D(next_node,$1);
+		//printf("parameter_type_list:get token \"%s\"\n",next_node->fun_name ); //this is the only function decl
 		if ((NULL NEQ temp_param_list) && (NULL NEQ temp_param_list->param_list) )
 		{
 #ifdef BISON_DEBUG
@@ -667,6 +685,7 @@ direct_declarator
 		memset(next_node,ZERO,sizeof(Function_D));
 		next_node->fun_name = temp_symbol_info->fun_name;
 		next_node->fun_type = FUN_IS_FUNC_BUT_UNKOWN_TYPE;
+		ASSIGN_FUNC_D_LOC_TO_FUNC_D(next_node,$1);
 #ifdef BISON_DEBUG
 		 //printf("function without params:\"%s\"\n",next_node->fun_name ); //this is the only function decl
 #endif
@@ -685,7 +704,6 @@ pointer
 		 strcat(next_node->symbol_name,temp_symbol_info->symbol_name);
 		 ASSIGN_SYMBOL_LOC(next_node,temp_symbol_info);
 		 $$ = next_node;
-		 //P_FREE($1);
 	}
 	| '*' type_qualifier_list
 	{
@@ -704,8 +722,6 @@ pointer
                  strcat(next_node->symbol_name,temp_symbol_info2->symbol_name);
         	 ASSIGN_SYMBOL_LOC(next_node,temp_symbol_info2);
         	 $$ = next_node;
-        	 //P_FREE($1);
-        	 //P_FREE($2);
 
 	}
 	| '*' type_qualifier_list pointer
@@ -722,8 +738,6 @@ pointer
                           strcat(next_node->symbol_name,temp_symbol_info2->symbol_name);
                  	 ASSIGN_SYMBOL_LOC(next_node,temp_symbol_info2);
                  	 $$ = next_node;
-                 	 //P_FREE($1);
-                 	 //P_FREE($3);
 	}
 	;
 
@@ -753,7 +767,6 @@ parameter_list
 		memcpy(param_list->param_list[param_list->no_param].param_type,temp_symbol_info->symbol_name,strlen(temp_symbol_info->symbol_name));
 		param_list->no_param++;
 		$$ = param_list;
-		//P_FREE($1);
 
 	}
 	| parameter_list ',' parameter_declaration
@@ -817,11 +830,7 @@ parameter_declaration
 			strcat(next_node->symbol_name," ");
 			strcat(next_node->symbol_name,cur_node2->symbol_name);
 		}
-
-		//P_FREE($1);
-		//P_FREE($2);
 		$$ = next_node;
-		//print_symbols(next_node);
         }
 	| declaration_specifiers
 	{
@@ -838,7 +847,6 @@ identifier_list
 	  memcpy(next_node->param_list[next_node->no_param].param_type, temp_symbol_info->symbol_name, strlen(temp_symbol_info->symbol_name));
 	  next_node->no_param++;
 	  $$ = next_node;
-	  //P_FREE($1);
 	}
 	| identifier_list ',' IDENTIFIER
 	{
@@ -848,7 +856,6 @@ identifier_list
 	  memcpy(next_node->param_list[next_node->no_param].param_type, temp_symbol_info->symbol_name, strlen(temp_symbol_info->symbol_name));
 	  next_node->no_param++;
 	  $$ = next_node;
-	  //P_FREE($3);
         }
 	;
 
@@ -884,7 +891,6 @@ direct_abstract_declarator
 	| '(' ')'
 	| '(' parameter_type_list ')'
 	{
-		assert(0);
 		RW_FREE($2);
 	}
 	| direct_abstract_declarator '(' ')'
@@ -892,7 +898,6 @@ direct_abstract_declarator
 	{
 		//abstract declarator usually used in runtime, we can not check it by using static analyzer
 		//but we need to free buffer
-		assert(0);
 		RW_FREE($3);
 	}
 	;
@@ -1006,7 +1011,6 @@ external_declaration
 	{
 		$$ = $1;
 		FREE_AST_NODE($1);
-		//FREE_AST_NODE($1);
 	}
 	;
 
@@ -1022,7 +1026,6 @@ function_definition
 		  return x + y;
 		}
 	*/
-	//sprintf();
 	assert(0);
 	}
 	| declaration_specifiers declarator compound_statement
@@ -1068,7 +1071,6 @@ function_definition
 	} else { // this is struct or other state reduce and it is also func
 		//this will not reach
 		assert(0);
-
 		Function_D *temp_symbol_info = $2;
 		printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->fun_name );
 		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->fun_name) )
@@ -1092,11 +1094,11 @@ function_definition
 declaration_list
 	: declaration
 	{
-	$$ = $1;
+		$$ = $1;
 	}
 	| declaration_list declaration
 	{
-	$$ = $2;
+		$$ = $2;
 	}
 	;
 %%
