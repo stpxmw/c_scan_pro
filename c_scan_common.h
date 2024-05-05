@@ -13,6 +13,7 @@
 #define ZERO 0
 #define MAX_FUN_PARAM_NUM 10
 #define MAX_SYMBOL_LEN 50
+#define MAX_FILE_NAME_LEN 100
 
 #define RW_MALLOC malloc
 #define RW_FREE free
@@ -30,6 +31,8 @@
 #define ASSIGN_SYMBOL_LOC assign_symbol_loc
 #define FREE_AST_NODE rel_ast_node_buffer
 #define FREE_FUNC_D_NODE rel_func_d_node
+
+#define CUR_FILE_NAME current_file_name
 
 typedef enum {
     ENUM_TYPEDEF,
@@ -77,8 +80,18 @@ typedef struct Function_Pre {
     Func_Loc_t fun_location_desc;
 } Function_Pre;
 
+typedef struct Function_List_Node_t {
+    char* fun_name;
+    Fun_Type_t fun_type;
+    int no_param;
+    Param_t param_list[MAX_FUN_PARAM_NUM];
+    char* ret_value_type;
+    Func_Loc_t fun_location_desc;
+} Function_List_Node_t;
+
 typedef struct Node {
     char* data;
+    void* local_ptr;
     struct Node* next;
 } Node;
 
@@ -110,13 +123,14 @@ void lex_yacc_parser_deinit(void);
 void p_memory_init(void);
 void p_memory_deinit(void);
 
+void print_item_name(char *ptr,int len);
 void memory_leak_check(void);
 
 void* pd_malloc(int line);
 void* pd_free(void * ptr);
 
-Node* createNode(char* data);
-void insertAtHead(Node** head, char* data);
+Node* createNode(char* data,void* local_ptr);
+void insertAtHead(Node** head, char* data,void* local_ptr);
 void deleteNode(Node** head, char* data);
 void printList(Node* head);
 void freeList(Node* head);
@@ -128,4 +142,13 @@ void assign_symbol_loc_to_func_d(Function_D* dest, SYMBOL_INFO_T* src);
 void assign__func_d_loc_to_func_d(Function_D* dest, Function_D* src);
 void rel_ast_node_buffer(Function_Pre *p);
 void rel_func_d_node(Function_D *p);
+Function_List_Node_t *transfer_func_to_list_node(Function_Pre *p);
+void add_func_node_to_ref_list(Function_List_Node_t *p);
+void printf_all_func_ref_list(Node * p);
+void printf_sub_node_list(Node* p);
+void printf_func_node_t(Function_List_Node_t * p);
+void free_function_rel_list(Node * p);
+void free_sub_node_list(Node * p);
+void free_func_node_t(Function_List_Node_t* p);
+
 #endif //C_SCAN_C_SCAN_COMMON_H

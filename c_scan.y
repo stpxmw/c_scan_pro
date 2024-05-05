@@ -230,7 +230,7 @@ declaration
                         {
 				if( (strcmp(temp_symbol_info0->symbol_name, "typedef struct") == 0)
 				  ||(strcmp(temp_symbol_info0->symbol_name, "struct") == 0) ){
-					insertAtHead(&struct_link_list,temp_symbol_info->fun_name);
+					insertAtHead(&struct_link_list,temp_symbol_info->fun_name,NULL);
 #ifdef BISON_DEBUG
                         		printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->fun_name );
 #endif
@@ -460,7 +460,7 @@ struct_or_union_specifier
 		SYMBOL_INFO_T *temp_symbol_info = $2;
 		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
 		{
-			insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+			insertAtHead(&struct_link_list,temp_symbol_info->symbol_name,NULL);
 #ifdef BISON_DEBUG
                 	//printf("IDENTIFIER get token %s \n",temp_symbol_info->symbol_name );
 #endif
@@ -475,7 +475,7 @@ struct_or_union_specifier
 		SYMBOL_INFO_T *temp_symbol_info = $2;
 		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
 		{
-			insertAtHead(&struct_link_list,temp_symbol_info->symbol_name);
+			insertAtHead(&struct_link_list,temp_symbol_info->symbol_name,NULL);
 #ifdef BISON_DEBUG
 			//printf("IDENTIFIER get token %s \n", temp_symbol_info->symbol_name);
 #endif
@@ -957,6 +957,20 @@ block_item_list
 block_item
 	: declaration
 	{
+	//to do in the feature
+	Function_List_Node_t *fun_node = NULL;
+        Function_Pre *dummy = $1;
+        if (NULL NEQ dummy->function_d)
+        {
+        	dummy->function_d->fun_type = FUN_CALL;
+                fun_node = transfer_func_to_list_node(dummy);
+                if (NULL NEQ fun_node)
+                {
+                 add_func_node_to_ref_list(fun_node);
+                }else {
+                 	free_func_node_t(fun_node);
+              }
+        }
 	 FREE_AST_NODE($1);
 	}
 	| statement
@@ -1004,11 +1018,31 @@ translation_unit
 external_declaration
 	: function_definition
 	{
+		Function_List_Node_t *fun_node = NULL;
+		fun_node = transfer_func_to_list_node($1);
+		if (NULL NEQ fun_node)
+		{
+		 add_func_node_to_ref_list(fun_node);
+		}
+		 else {
+                 			free_func_node_t(fun_node);
+                 		}
 		$$ = $1;
 		FREE_AST_NODE($1);
 	}
 	| declaration
 	{
+		Function_List_Node_t *fun_node = NULL;
+		Function_Pre *dummy = $1;
+		fun_node = transfer_func_to_list_node($1);
+		if (NULL NEQ fun_node)
+		{
+                 add_func_node_to_ref_list(fun_node);
+		} else {
+			free_func_node_t(fun_node);
+		}
+
+		//assert(0);
 		$$ = $1;
 		FREE_AST_NODE($1);
 	}
@@ -1040,8 +1074,8 @@ function_definition
 		memset(next_node,0,sizeof(Function_Pre));
 		next_node->function_d = $2;
 		//next_node->fun_location_desc.file_name =
-		//next_node->fun_location_desc.line =
-		//next_node->fun_location_desc.column =
+		next_node->fun_location_desc.line =next_node->function_d->func_loc.line;
+                next_node->fun_location_desc.column =next_node->function_d->func_loc.column;
 		next_node->ret_value_type = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
 		memset(next_node->ret_value_type,0,MAX_SYMBOL_LEN);
 		memcpy(next_node->ret_value_type,temp_symbol_info0->symbol_name, strlen(temp_symbol_info0->symbol_name));
@@ -1078,7 +1112,7 @@ function_definition
 			if( (strcmp(temp_symbol_info0->symbol_name, "typedef struct") == 0)
 			  ||(strcmp(temp_symbol_info0->symbol_name, "struct") == 0) ){
 
-				insertAtHead(&struct_link_list,temp_symbol_info->fun_name);
+				insertAtHead(&struct_link_list,temp_symbol_info->fun_name,NULL);
 #ifdef BISON_DEBUG
 				printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->fun_name );
 #endif

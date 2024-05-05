@@ -6,6 +6,10 @@ extern int __sprintf_chk (char * , int, long unsigned int,
 
  }
 
+  void main_noparam(){
+
+  }
+
 typedef struct Node {
     char* data;
     struct Node* next;
@@ -46,6 +50,18 @@ Node** createNode(char* data);
 void insertAtHead(Node** head, char* data);
 void* deleteNode(Node** head, char* data);
 void printList(Node* head);
+int* main() {
+    int len;
+    lex_yacc_parser_init();
+    //printf("Hello, World!\n");
+    read_file("../test.txt");
+    //test();
+    len = sizeof(MEMORY_UNIT);
+    printf("len %d \n", len);
+    lex_yacc_parser_deinit();
+    return 0;
+    memset(&(p->param_list), ZERO, sizeof(int*));
+}
 int* main() {
     int len;
     lex_yacc_parser_init();

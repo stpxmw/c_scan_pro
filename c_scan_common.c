@@ -8,11 +8,166 @@ extern FILE *yyin;
 extern int yyparse();
 void* inital_memory = NULL;
 
+char current_file_name[MAX_FILE_NAME_LEN] = "";
+
 unsigned char* first_search_location = ZERO;
 unsigned char* search_location = ZERO;//we use this flag to speed up memory search
 unsigned char* last_search_location = ZERO;//we use this flag to speed up memory search
 
 Node *struct_link_list = NULL; //define the struct or enum or union list, which used for parse c.i, when finish the parse of one file, this link should be free
+
+Node *function_ref_link_list = NULL;//define the link list for store function def.
+
+void free_func_node_t(Function_List_Node_t* p)
+{
+    if (NULL NEQ p)
+    {
+        if (p->fun_name NEQ NULL)
+        {
+            RW_FREE(p->fun_name);
+            p->fun_name = NULL;
+        }
+        if (p->ret_value_type NEQ NULL)
+        {
+            RW_FREE(p->ret_value_type);
+            p->ret_value_type =NULL;
+        }
+        RW_FREE(p);
+    }
+}
+
+
+
+
+void free_sub_node_list(Node * p)
+{
+    Node* current = p;
+    Node* next = NULL;
+    Function_List_Node_t *cur_node = NULL;
+
+    while (current != NULL) {
+        next = current->next;
+        cur_node =(Function_List_Node_t *) (current->local_ptr);
+        free_func_node_t(cur_node);
+        if(current->data NEQ 0){
+            RW_FREE(current->data);
+        }
+        RW_FREE(current);
+        current = next;
+    }
+}
+
+
+void free_function_rel_list(Node * p)
+{
+    Node* current = p;
+    Node* next = NULL;
+    Node* sub_node = NULL;
+    while (current != NULL) {
+        //printf("%s -> ", current->data);
+        next = current->next;
+        sub_node = (Node*)(current->local_ptr);
+        free_sub_node_list(sub_node);
+        if(current->data NEQ 0){
+            RW_FREE(current->data);
+        }
+        RW_FREE(current);
+        current = next;
+    }
+    //free head data
+}
+
+
+
+void printf_func_node_t(Function_List_Node_t * p)
+{
+    printf("FUNCTION: %s,TYPE: %d, RET TYPE: %s, LINE: %d, COL: %d ",p->fun_name,p->fun_type,p->ret_value_type,p->fun_location_desc.line,p->fun_location_desc.column);
+}
+
+
+void printf_sub_node_list(Node* p)
+{
+    Node* current = p;
+    Function_List_Node_t *cur_node = NULL;
+    while (current != NULL) {
+        cur_node =(Function_List_Node_t *) (current->local_ptr);
+        printf_func_node_t(cur_node);
+        current = current->next;
+    }
+}
+
+
+void printf_all_func_ref_list(Node * p)
+{
+    Node* current = p;
+    Node* sub_node = NULL;
+    while (current != NULL) {
+        //printf("%s -> ", current->data);
+        printf("function name :%s -> ", current->data);
+        sub_node = (Node*)current->local_ptr;
+        printf_sub_node_list(sub_node);
+        current = current->next;
+        printf("\n");
+    }
+
+}
+
+void add_func_node_to_ref_list(Function_List_Node_t *p)
+{
+    Node* find_header = NULL;
+    //firstly, we need to check if list has already the same func name
+    if (NULL NEQ (find_header = findNode(function_ref_link_list,p->fun_name) ) )
+    {
+        //we find it !
+        //we need to add it to the list to the header,
+        //Node* sub_header = (Node*)(find_header->local_ptr);
+
+        //add to the sub_header
+        //Node* new_sub_node = createNode(p->fun_name,(void*)p);
+        insertAtHead((Node **) &(find_header->local_ptr), p->fun_name, (void *)p);
+
+        //find_header->local_ptr = sub_header;//!!!!
+
+
+    } else {
+
+
+        //we can not find, and add it to the header
+        Node* new_sub_node = createNode(p->fun_name,(void*)p);
+        insertAtHead(&function_ref_link_list,p->fun_name,(void *)new_sub_node);
+
+    }
+
+}
+
+Function_List_Node_t *transfer_func_to_list_node(Function_Pre *p)
+{
+    Function_List_Node_t * ret = (Function_List_Node_t *)RW_MALLOC(sizeof(Function_List_Node_t));
+    memset(ret,ZERO,sizeof(Function_List_Node_t));
+    if (NULL EQ p)
+    {
+        printf("ERROR, CAN NOT TRANSFERO VOID POIONTER");
+        RW_FREE(ret);
+        ret = NULL;
+    } else {
+        if (NULL EQ p->function_d)
+        {
+            RW_FREE(ret);
+            ret = NULL;
+            return (Function_List_Node_t *)NULL;//sometimes it is no function
+        }
+
+        ret->fun_name = strdup(p->function_d->fun_name);
+        ret->fun_type = p->function_d->fun_type;
+        if (NULL NEQ p->function_d->param_list){
+            ret->no_param = p->function_d->param_list->no_param;
+            memcpy(ret->param_list,p->function_d->param_list->param_list,sizeof(Param_t)*MAX_FUN_PARAM_NUM);
+        }
+        ret->ret_value_type = strdup(p->ret_value_type);
+        memcpy(&(ret->fun_location_desc),&(p->fun_location_desc),sizeof(Func_Loc_t));//this func_loc_t name is not used
+    }
+    return ret;
+}
 
 void rel_func_d_node(Function_D *p)
 {
@@ -102,19 +257,20 @@ void print_symbols(SYMBOL_INFO_T* p)
     }
 }
 
-Node* createNode(char* data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
+Node* createNode(char* data, void* local_ptr) {
+    Node* newNode = (Node*)RW_MALLOC(sizeof(Node));
     if (newNode == NULL) {
         printf("Error: unable to create new node\n");
         exit(1);
     }
     newNode->data = strdup(data);  // 为字符串分配空间并复制内容
+    newNode->local_ptr = local_ptr;
     newNode->next = NULL;
     return newNode;
 }
 
-void insertAtHead(Node** head, char* data) {
-    Node* newNode = createNode(data);
+void insertAtHead(Node** head, char* data,void* local_ptr) {
+    Node* newNode = createNode(data,local_ptr);
     newNode->next = *head;
     *head = newNode;
 }
@@ -150,8 +306,10 @@ void deleteNode(Node** head, char* data) {
         } else {
             previous->next = current->next;
         }
-        free(current->data);  // 释放字符串内存
-        free(current);        // 释放节点内存
+        RW_FREE(current->data);  // 释放字符串内存
+        if (NULL NEQ current->local_ptr)
+            free(current->local_ptr);
+        RW_FREE(current);        // 释放节点内存
     }
 }
 
@@ -159,15 +317,20 @@ void freeList(Node* head) {
     Node* current = head;
     Node* next = NULL;
     char* data;
-    current = head->next;
+    //current = head->next;
     while (current != NULL) {
         next = current->next;
         data = current->data;
         RW_FREE(data);
+        if(current->local_ptr)
+        {
+            RW_FREE(current->local_ptr);
+        }
         RW_FREE(current);
         current = next;
     }
-    head->next = NULL;
+    //head->next = NULL;
+    //RW_FREE(head->data);
 }
 
 void printList(Node* head) {
