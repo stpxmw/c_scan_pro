@@ -72,7 +72,7 @@ void print_params(Param_t_list *p)
 {
     printf("START PRINT PARAMS --> ");
     int no = p->no_param;
-    int i = 0;
+    int i;
     for (i = 0;i< no;i++)
     {
         printf("%s |",p->param_list[i].param_type);
@@ -144,9 +144,10 @@ void deleteNode(Node** head, char* data) {
 }
 
 void freeList(Node* head) {
-    Node* current = head->next;
+    Node* current = head;
     Node* next = NULL;
-    char* data = NULL;
+    char* data;
+    current = head->next;
     while (current != NULL) {
         next = current->next;
         data = current->data;
@@ -343,9 +344,6 @@ void* pd_malloc(int line)
 
         find_memory_unit += 2*sizeof(int);
     }
-
-
-
         return find_memory_unit;
 }
 

@@ -650,23 +650,23 @@ static const yytype_uint16 yyrline[] =
      107,   108,   112,   113,   114,   115,   116,   120,   121,   122,
      126,   127,   131,   132,   136,   137,   141,   142,   146,   147,
      151,   152,   156,   157,   161,   162,   163,   164,   165,   166,
-     167,   168,   169,   170,   171,   175,   176,   180,   184,   189,
-     247,   279,   318,   337,   375,   380,   418,   423,   431,   435,
-     443,   447,   451,   452,   453,   454,   455,   459,   460,   461,
-     462,   463,   464,   465,   466,   467,   468,   469,   470,   471,
-     472,   473,   477,   490,   492,   503,   507,   511,   518,   519,
-     523,   527,   528,   529,   530,   534,   535,   539,   540,   541,
-     545,   546,   547,   548,   549,   553,   554,   558,   559,   563,
-     564,   565,   569,   573,   581,   591,   601,   607,   608,   609,
-     610,   611,   612,   613,   614,   615,   636,   658,   673,   685,
-     689,   706,   726,   727,   732,   736,   743,   754,   766,   796,
-     821,   828,   838,   851,   852,   856,   860,   864,   872,   873,
-     874,   875,   876,   877,   878,   879,   880,   885,   886,   896,
-     897,   898,   902,   903,   904,   905,   909,   913,   914,   918,
-     919,   923,   924,   925,   926,   927,   928,   932,   933,   934,
-     938,   939,   943,   944,   948,   949,   953,   954,   958,   959,
-     960,   964,   965,   966,   967,   968,   969,   973,   974,   975,
-     976,   977,   981,   982,   986,   991,   999,  1013,  1078,  1079
+     167,   168,   169,   170,   171,   175,   176,   180,   184,   191,
+     252,   284,   323,   342,   380,   385,   423,   428,   436,   440,
+     448,   452,   456,   457,   458,   459,   460,   464,   465,   466,
+     467,   468,   469,   470,   471,   472,   473,   474,   475,   476,
+     477,   478,   482,   495,   497,   508,   512,   516,   523,   524,
+     528,   532,   533,   534,   535,   539,   540,   544,   545,   546,
+     550,   551,   552,   553,   554,   558,   559,   563,   564,   568,
+     569,   570,   574,   578,   586,   596,   606,   612,   613,   614,
+     615,   616,   617,   618,   619,   620,   641,   663,   678,   690,
+     694,   711,   731,   732,   737,   741,   748,   759,   771,   801,
+     826,   833,   843,   856,   857,   861,   865,   869,   877,   878,
+     879,   880,   881,   882,   883,   884,   885,   890,   891,   901,
+     902,   903,   907,   908,   909,   910,   914,   918,   919,   923,
+     924,   928,   929,   930,   931,   932,   933,   937,   938,   939,
+     943,   944,   948,   949,   953,   957,   961,   962,   966,   967,
+     968,   972,   973,   974,   975,   976,   980,   987,   988,   989,
+     990,   991,   995,   996,  1000,  1005,  1014,  1028,  1093,  1097
 };
 #endif
 
@@ -2067,13 +2067,15 @@ yyreduce:
         case 78:
 #line 185 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
+		Function_Pre* dummy_next_node = (Function_Pre*)RW_MALLOC(sizeof(Function_Pre) );
+		(yyval.function_pre) = dummy_next_node;
 		//printf("trace func00 ret:\n");
         	//print_symbols($1);
 	;}
     break;
 
   case 79:
-#line 190 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 192 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		/* $1 means ret type, $2 means init param list and fuction name may be also have "*" */
 		Function_D *tem_fuc_trace = (yyvsp[(2) - (3)].function_d);
@@ -2107,8 +2109,8 @@ yyreduce:
 			printf("function type is \"%d\"\n", tem_fuc_trace->fun_type);
 			printf("ret TYPE is \"%s\"\n", next_node->ret_value_type);
 
-			//$$ = next_node;
-			FREE_AST_NODE(next_node);
+			(yyval.function_pre) = next_node;
+			//FREE_AST_NODE(next_node);
 
 		} else { // this is struct or other state reduce like struct declare, we can not add all struct to it
 			Function_D *temp_symbol_info = (yyvsp[(2) - (3)].function_d);
@@ -2121,17 +2123,20 @@ yyreduce:
 #ifdef BISON_DEBUG
                         		printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->fun_name );
 #endif
-				 //$$ = $2;
+
 				 }
                         }
                         FREE_FUNC_D_NODE((yyvsp[(2) - (3)].function_d));
                         //RW_FREE(temp_symbol_info);
+                        Function_Pre* dummy_next_node = (Function_Pre*)RW_MALLOC(sizeof(Function_Pre) );
+                        (yyval.function_pre) = dummy_next_node;
+
 		}
 	;}
     break;
 
   case 80:
-#line 248 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 253 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T* next_node = (SYMBOL_INFO_T*)P_MALLOCA;
 		next_node->symbol_name = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
@@ -2166,7 +2171,7 @@ yyreduce:
     break;
 
   case 81:
-#line 280 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 285 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T* next_node = (SYMBOL_INFO_T*)P_MALLOCA;
 		next_node->symbol_name = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
@@ -2207,7 +2212,7 @@ yyreduce:
     break;
 
   case 82:
-#line 319 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 324 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T* next_node = (SYMBOL_INFO_T*)P_MALLOCA;
 		next_node->symbol_name = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
@@ -2229,7 +2234,7 @@ yyreduce:
     break;
 
   case 83:
-#line 338 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 343 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T* next_node = (SYMBOL_INFO_T*)P_MALLOCA;
 		next_node->symbol_name = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
@@ -2270,14 +2275,14 @@ yyreduce:
     break;
 
   case 84:
-#line 376 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 381 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
 	;}
     break;
 
   case 85:
-#line 381 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 386 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
         		SYMBOL_INFO_T* next_node = (SYMBOL_INFO_T*)P_MALLOCA;
         		next_node->symbol_name = (char *)RW_MALLOC(MAX_SYMBOL_LEN);
@@ -2318,42 +2323,42 @@ yyreduce:
     break;
 
   case 86:
-#line 419 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 424 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 
 	;}
     break;
 
   case 87:
-#line 425 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 430 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.symbol_info) = (yyvsp[(2) - (2)].symbol_info);
         ;}
     break;
 
   case 88:
-#line 432 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 437 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.function_d) = (yyvsp[(1) - (1)].function_d);
 	;}
     break;
 
   case 89:
-#line 436 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 441 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	//currently do not support
 	;}
     break;
 
   case 90:
-#line 444 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 449 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	 	(yyval.function_d) = (yyvsp[(1) - (1)].function_d);
 	;}
     break;
 
   case 112:
-#line 478 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 483 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(2) - (5)].symbol_info);
 		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
@@ -2368,7 +2373,7 @@ yyreduce:
     break;
 
   case 114:
-#line 493 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 498 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(2) - (2)].symbol_info);
 		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->symbol_name) )
@@ -2382,21 +2387,21 @@ yyreduce:
     break;
 
   case 116:
-#line 508 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 513 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	  (yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
 	;}
     break;
 
   case 117:
-#line 512 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 517 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	  (yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
 	;}
     break;
 
   case 143:
-#line 574 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 579 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T *temp_symbol = (yyvsp[(1) - (2)].symbol_info);
 		Function_D *temp_func_d = (yyvsp[(2) - (2)].function_d);
@@ -2407,7 +2412,7 @@ yyreduce:
     break;
 
   case 144:
-#line 582 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 587 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		Function_D *temp_func_d = (yyvsp[(1) - (1)].function_d);
 		temp_func_d->is_ret_val_point = 0;
@@ -2416,7 +2421,7 @@ yyreduce:
     break;
 
   case 145:
-#line 592 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 597 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		Function_D* next_node =(Function_D*)RW_MALLOC(sizeof(Function_D));
 		memset(next_node,ZERO,sizeof(Function_D));
@@ -2429,7 +2434,7 @@ yyreduce:
     break;
 
   case 146:
-#line 602 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 607 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	 //currently we do not support like ----void *test(int(*Test2)(int a, int b) )-----
 
@@ -2437,7 +2442,7 @@ yyreduce:
     break;
 
   case 155:
-#line 616 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 621 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		Param_t_list *temp_param_list = (yyvsp[(3) - (4)].param_list);//$1 is function name ;$3 is the fuction params
 		Function_D *temp_symbol_info = (yyvsp[(1) - (4)].function_d);
@@ -2461,7 +2466,7 @@ yyreduce:
     break;
 
   case 156:
-#line 637 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 642 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 {
 		Param_t_list *temp_param_list = (yyvsp[(3) - (4)].param_list);//$1 is function name ;$3 is the fuction params
@@ -2485,7 +2490,7 @@ yyreduce:
     break;
 
   case 157:
-#line 659 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 664 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		Function_D *temp_symbol_info = (yyvsp[(1) - (3)].function_d);
 		Function_D* next_node = (Function_D*)RW_MALLOC(sizeof(Function_D));
@@ -2501,7 +2506,7 @@ yyreduce:
     break;
 
   case 158:
-#line 674 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 679 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		 SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(1) - (1)].symbol_info);
 		 SYMBOL_INFO_T *next_node = (SYMBOL_INFO_T *)P_MALLOCA;
@@ -2516,14 +2521,14 @@ yyreduce:
     break;
 
   case 159:
-#line 686 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 691 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	 (yyval.symbol_info) = (yyvsp[(1) - (2)].symbol_info);
 	;}
     break;
 
   case 160:
-#line 690 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 695 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		 SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(1) - (2)].symbol_info);
 		 SYMBOL_INFO_T *temp_symbol_info2 = (yyvsp[(2) - (2)].symbol_info);
@@ -2543,7 +2548,7 @@ yyreduce:
     break;
 
   case 161:
-#line 707 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 712 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 
 	 		SYMBOL_INFO_T *temp_symbol_info = (yyvsp[(1) - (3)].symbol_info);
@@ -2563,21 +2568,21 @@ yyreduce:
     break;
 
   case 164:
-#line 733 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 738 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.param_list) = (yyvsp[(1) - (1)].param_list);
 	;}
     break;
 
   case 165:
-#line 737 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 742 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.param_list) = (yyvsp[(1) - (3)].param_list);
 	;}
     break;
 
   case 166:
-#line 744 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 749 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T *temp_symbol_info= (yyvsp[(1) - (1)].symbol_info);
 		Param_t_list* param_list = (Param_t_list*)RW_MALLOC(sizeof(Param_t_list));
@@ -2591,7 +2596,7 @@ yyreduce:
     break;
 
   case 167:
-#line 755 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 760 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		SYMBOL_INFO_T *temp_symbol_info= (yyvsp[(3) - (3)].symbol_info);
 		Param_t_list* param_list = (yyvsp[(1) - (3)].param_list);
@@ -2603,7 +2608,7 @@ yyreduce:
     break;
 
   case 168:
-#line 767 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 772 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 				//do nothing used in  delarator,but if it is a point we need to return
 				//we define it is function_d so cannot use symbol_info_t
@@ -2636,7 +2641,7 @@ yyreduce:
     break;
 
   case 169:
-#line 797 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 802 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		//do nothing used in abstract delarator,but if it is a point we need to return
 		SYMBOL_INFO_T *cur_node1 = (yyvsp[(1) - (2)].symbol_info);
@@ -2664,14 +2669,14 @@ yyreduce:
     break;
 
   case 170:
-#line 822 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 827 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
         ;}
     break;
 
   case 171:
-#line 829 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 834 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	  Param_t_list *next_node = (Param_t_list *)RW_MALLOC(sizeof(Param_t_list));
 	  SYMBOL_INFO_T *temp_symbol_info= (yyvsp[(1) - (1)].symbol_info);
@@ -2684,7 +2689,7 @@ yyreduce:
     break;
 
   case 172:
-#line 839 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 844 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 
 	  Param_t_list *next_node = (yyvsp[(1) - (3)].param_list);
@@ -2697,21 +2702,21 @@ yyreduce:
     break;
 
   case 175:
-#line 857 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 862 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.symbol_info) = (yyvsp[(1) - (1)].symbol_info);
 	;}
     break;
 
   case 176:
-#line 861 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 866 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.symbol_info) = NULL;
 	;}
     break;
 
   case 177:
-#line 865 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 870 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		//abstract declarator usually used in runtime, we can not check it by using static analyzer
 		(yyval.symbol_info) = NULL;
@@ -2719,7 +2724,7 @@ yyreduce:
     break;
 
   case 186:
-#line 881 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 886 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		assert(0);
 		RW_FREE((yyvsp[(2) - (3)].param_list));
@@ -2727,7 +2732,7 @@ yyreduce:
     break;
 
   case 188:
-#line 887 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 892 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		//abstract declarator usually used in runtime, we can not check it by using static analyzer
 		//but we need to free buffer
@@ -2736,8 +2741,29 @@ yyreduce:
 	;}
     break;
 
+  case 214:
+#line 954 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+	 FREE_AST_NODE((yyvsp[(1) - (1)].function_pre));
+	;}
+    break;
+
+  case 225:
+#line 977 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+		FREE_AST_NODE((yyvsp[(3) - (6)].function_pre));
+	;}
+    break;
+
+  case 226:
+#line 981 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+		FREE_AST_NODE((yyvsp[(3) - (7)].function_pre));
+	;}
+    break;
+
   case 234:
-#line 987 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 1001 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.function_pre) = (yyvsp[(1) - (1)].function_pre);
 		FREE_AST_NODE((yyvsp[(1) - (1)].function_pre));
@@ -2745,15 +2771,16 @@ yyreduce:
     break;
 
   case 235:
-#line 992 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 1006 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 		(yyval.function_pre) = (yyvsp[(1) - (1)].function_pre);
+		FREE_AST_NODE((yyvsp[(1) - (1)].function_pre));
 		//FREE_AST_NODE($1);
 	;}
     break;
 
   case 236:
-#line 1000 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 1015 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	/*
 	for origin c grammer,it like this, we do not advise use this way, so we assert!
@@ -2770,7 +2797,7 @@ yyreduce:
     break;
 
   case 237:
-#line 1014 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 1029 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
     {
 	/* $1 means ret type, $2 means init param list and fuction name may be also have "*" */
 	Function_D *tem_fuc_trace = (yyvsp[(2) - (3)].function_d);
@@ -2834,9 +2861,23 @@ yyreduce:
 ;}
     break;
 
+  case 238:
+#line 1094 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+	(yyval.function_pre) = (yyvsp[(1) - (1)].function_pre);
+	;}
+    break;
+
+  case 239:
+#line 1098 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+    {
+	(yyval.function_pre) = (yyvsp[(2) - (2)].function_pre);
+	;}
+    break;
+
 
 /* Line 1267 of yacc.c.  */
-#line 2840 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
+#line 2881 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -3050,7 +3091,7 @@ yyreturn:
 }
 
 
-#line 1081 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
+#line 1102 "/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.y"
 
 
 extern char* yytext;

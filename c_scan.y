@@ -23,7 +23,7 @@ extern Node *struct_link_list;
 %type <symbol_info>  parameter_declaration abstract_declarator type_qualifier function_specifier pointer '*' '(' ')'
 %type <param_list> parameter_list parameter_type_list direct_abstract_declarator identifier_list
 %type <function_d> direct_declarator declarator init_declarator_list init_declarator
-%type <function_pre> declaration function_definition external_declaration translation_unit
+%type <function_pre> declaration function_definition external_declaration translation_unit declaration_list block_item block_item_list
 
 %token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
@@ -183,6 +183,8 @@ constant_expression
 declaration
 	: declaration_specifiers ';'
 	{
+		Function_Pre* dummy_next_node = (Function_Pre*)RW_MALLOC(sizeof(Function_Pre) );
+		$$ = dummy_next_node;
 		//printf("trace func00 ret:\n");
         	//print_symbols($1);
 	}
@@ -220,8 +222,8 @@ declaration
 			printf("function type is \"%d\"\n", tem_fuc_trace->fun_type);
 			printf("ret TYPE is \"%s\"\n", next_node->ret_value_type);
 
-			//$$ = next_node;
-			FREE_AST_NODE(next_node);
+			$$ = next_node;
+			//FREE_AST_NODE(next_node);
 
 		} else { // this is struct or other state reduce like struct declare, we can not add all struct to it
 			Function_D *temp_symbol_info = $2;
@@ -234,11 +236,14 @@ declaration
 #ifdef BISON_DEBUG
                         		printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->fun_name );
 #endif
-				 //$$ = $2;
+
 				 }
                         }
                         FREE_FUNC_D_NODE($2);
                         //RW_FREE(temp_symbol_info);
+                        Function_Pre* dummy_next_node = (Function_Pre*)RW_MALLOC(sizeof(Function_Pre) );
+                        $$ = dummy_next_node;
+
 		}
 	}
 	;
@@ -946,6 +951,9 @@ block_item_list
 
 block_item
 	: declaration
+	{
+	 FREE_AST_NODE($1);
+	}
 	| statement
 	;
 
@@ -966,7 +974,13 @@ iteration_statement
 	| FOR '(' expression_statement expression_statement ')' statement
 	| FOR '(' expression_statement expression_statement expression ')' statement
 	| FOR '(' declaration expression_statement ')' statement
+	{
+		FREE_AST_NODE($3);
+	}
 	| FOR '(' declaration expression_statement expression ')' statement
+	{
+		FREE_AST_NODE($3);
+	}
 	;
 
 jump_statement
@@ -991,6 +1005,7 @@ external_declaration
 	| declaration
 	{
 		$$ = $1;
+		FREE_AST_NODE($1);
 		//FREE_AST_NODE($1);
 	}
 	;
@@ -1076,7 +1091,13 @@ function_definition
 
 declaration_list
 	: declaration
+	{
+	$$ = $1;
+	}
 	| declaration_list declaration
+	{
+	$$ = $2;
+	}
 	;
 %%
 
