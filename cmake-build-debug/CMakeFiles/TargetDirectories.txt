@@ -1,6 +1,3 @@
 /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/cmake-build-debug/CMakeFiles/c_scan_pro.dir
-/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/cmake-build-debug/CMakeFiles/lex_parser.dir
-/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/cmake-build-debug/CMakeFiles/yacc_parser.dir
-/Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/cmake-build-debug/CMakeFiles/commom_lib.dir
 /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/cmake-build-debug/CMakeFiles/edit_cache.dir
 /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/cmake-build-debug/CMakeFiles/rebuild_cache.dir

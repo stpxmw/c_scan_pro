@@ -9,7 +9,7 @@ int main() {
     int i = 0;
     while(1) {
     lex_yacc_parser_init();
-    read_file("./test.txt");
+    read_file("../test.txt");
 
     lex_yacc_parser_deinit();
         printList(struct_link_list);

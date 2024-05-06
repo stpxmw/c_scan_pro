@@ -47,10 +47,28 @@ cmake_ninja_workdir = /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/cmake-buil
 #############################################
 # Order-only phony target for c_scan_pro
 
-build cmake_object_order_depends_target_c_scan_pro: phony || cmake_object_order_depends_target_commom_lib cmake_object_order_depends_target_lex_parser cmake_object_order_depends_target_yacc_parser
+build cmake_object_order_depends_target_c_scan_pro: phony || /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.h /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c
 
 build CMakeFiles/c_scan_pro.dir/c_scan_main.c.o: C_COMPILER__c_scan_pro_unscanned_Debug /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan_main.c || cmake_object_order_depends_target_c_scan_pro
   DEP_FILE = CMakeFiles/c_scan_pro.dir/c_scan_main.c.o.d
+  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/c_scan_pro.dir
+  OBJECT_FILE_DIR = CMakeFiles/c_scan_pro.dir
+
+build CMakeFiles/c_scan_pro.dir/lex.yy.c.o: C_COMPILER__c_scan_pro_unscanned_Debug /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c || cmake_object_order_depends_target_c_scan_pro
+  DEP_FILE = CMakeFiles/c_scan_pro.dir/lex.yy.c.o.d
+  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/c_scan_pro.dir
+  OBJECT_FILE_DIR = CMakeFiles/c_scan_pro.dir
+
+build CMakeFiles/c_scan_pro.dir/c_scan.tab.c.o: C_COMPILER__c_scan_pro_unscanned_Debug /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c || cmake_object_order_depends_target_c_scan_pro
+  DEP_FILE = CMakeFiles/c_scan_pro.dir/c_scan.tab.c.o.d
+  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/c_scan_pro.dir
+  OBJECT_FILE_DIR = CMakeFiles/c_scan_pro.dir
+
+build CMakeFiles/c_scan_pro.dir/c_scan_common.c.o: C_COMPILER__c_scan_pro_unscanned_Debug /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan_common.c || cmake_object_order_depends_target_c_scan_pro
+  DEP_FILE = CMakeFiles/c_scan_pro.dir/c_scan_common.c.o.d
   FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
   OBJECT_DIR = CMakeFiles/c_scan_pro.dir
   OBJECT_FILE_DIR = CMakeFiles/c_scan_pro.dir
@@ -63,110 +81,13 @@ build CMakeFiles/c_scan_pro.dir/c_scan_main.c.o: C_COMPILER__c_scan_pro_unscanne
 #############################################
 # Link the executable c_scan_pro
 
-build c_scan_pro: C_EXECUTABLE_LINKER__c_scan_pro_Debug CMakeFiles/c_scan_pro.dir/c_scan_main.c.o | libyacc_parser.a libcommom_lib.a liblex_parser.a || libcommom_lib.a liblex_parser.a libyacc_parser.a
+build c_scan_pro: C_EXECUTABLE_LINKER__c_scan_pro_Debug CMakeFiles/c_scan_pro.dir/c_scan_main.c.o CMakeFiles/c_scan_pro.dir/lex.yy.c.o CMakeFiles/c_scan_pro.dir/c_scan.tab.c.o CMakeFiles/c_scan_pro.dir/c_scan_common.c.o
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6
-  LINK_LIBRARIES = libyacc_parser.a  libcommom_lib.a  liblex_parser.a
   OBJECT_DIR = CMakeFiles/c_scan_pro.dir
   POST_BUILD = :
   PRE_LINK = :
   TARGET_FILE = c_scan_pro
   TARGET_PDB = c_scan_pro.dbg
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target lex_parser
-
-
-#############################################
-# Order-only phony target for lex_parser
-
-build cmake_object_order_depends_target_lex_parser: phony || /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c
-
-build CMakeFiles/lex_parser.dir/lex.yy.c.o: C_COMPILER__lex_parser_unscanned_Debug /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/lex.yy.c || cmake_object_order_depends_target_lex_parser
-  DEP_FILE = CMakeFiles/lex_parser.dir/lex.yy.c.o.d
-  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/lex_parser.dir
-  OBJECT_FILE_DIR = CMakeFiles/lex_parser.dir
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target lex_parser
-
-
-#############################################
-# Link the static library liblex_parser.a
-
-build liblex_parser.a: C_STATIC_LIBRARY_LINKER__lex_parser_Debug CMakeFiles/lex_parser.dir/lex.yy.c.o
-  ARCH_FLAGS = -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6
-  LANGUAGE_COMPILE_FLAGS = -g
-  OBJECT_DIR = CMakeFiles/lex_parser.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = liblex_parser.a
-  TARGET_PDB = lex_parser.a.dbg
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target yacc_parser
-
-
-#############################################
-# Order-only phony target for yacc_parser
-
-build cmake_object_order_depends_target_yacc_parser: phony || /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.h
-
-build CMakeFiles/yacc_parser.dir/c_scan.tab.c.o: C_COMPILER__yacc_parser_unscanned_Debug /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c || cmake_object_order_depends_target_yacc_parser
-  DEP_FILE = CMakeFiles/yacc_parser.dir/c_scan.tab.c.o.d
-  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/yacc_parser.dir
-  OBJECT_FILE_DIR = CMakeFiles/yacc_parser.dir
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target yacc_parser
-
-
-#############################################
-# Link the static library libyacc_parser.a
-
-build libyacc_parser.a: C_STATIC_LIBRARY_LINKER__yacc_parser_Debug CMakeFiles/yacc_parser.dir/c_scan.tab.c.o
-  ARCH_FLAGS = -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6
-  LANGUAGE_COMPILE_FLAGS = -g
-  OBJECT_DIR = CMakeFiles/yacc_parser.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = libyacc_parser.a
-  TARGET_PDB = yacc_parser.a.dbg
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target commom_lib
-
-
-#############################################
-# Order-only phony target for commom_lib
-
-build cmake_object_order_depends_target_commom_lib: phony || CMakeFiles/commom_lib.dir
-
-build CMakeFiles/commom_lib.dir/c_scan_common.c.o: C_COMPILER__commom_lib_unscanned_Debug /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan_common.c || cmake_object_order_depends_target_commom_lib
-  DEP_FILE = CMakeFiles/commom_lib.dir/c_scan_common.c.o.d
-  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/commom_lib.dir
-  OBJECT_FILE_DIR = CMakeFiles/commom_lib.dir
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target commom_lib
-
-
-#############################################
-# Link the static library libcommom_lib.a
-
-build libcommom_lib.a: C_STATIC_LIBRARY_LINKER__commom_lib_Debug CMakeFiles/commom_lib.dir/c_scan_common.c.o
-  ARCH_FLAGS = -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.6
-  LANGUAGE_COMPILE_FLAGS = -g
-  OBJECT_DIR = CMakeFiles/commom_lib.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = libcommom_lib.a
-  TARGET_PDB = commom_lib.a.dbg
 
 
 #############################################
@@ -212,12 +133,6 @@ build /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/c_scan.tab.c /Users/xumanw
 # =============================================================================
 # Target aliases.
 
-build commom_lib: phony libcommom_lib.a
-
-build lex_parser: phony liblex_parser.a
-
-build yacc_parser: phony libyacc_parser.a
-
 # =============================================================================
 # Folder targets.
 
@@ -226,7 +141,7 @@ build yacc_parser: phony libyacc_parser.a
 #############################################
 # Folder: /Users/xumanwei/Documents/CLION_PROJ/c_scan_pro/cmake-build-debug
 
-build all: phony c_scan_pro liblex_parser.a libyacc_parser.a libcommom_lib.a
+build all: phony c_scan_pro
 
 # =============================================================================
 # Built-in targets

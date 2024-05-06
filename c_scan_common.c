@@ -92,6 +92,7 @@ void printf_sub_node_list(Node* p)
     while (current != NULL) {
         cur_node =(Function_List_Node_t *) (current->local_ptr);
         printf_func_node_t(cur_node);
+        printf(" |||  ");
         current = current->next;
     }
 }
