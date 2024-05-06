@@ -1,10 +1,17 @@
 
+
+typedef int int1,int2;
+int test111(),test333();
+
 extern int __sprintf_chk (char * , int, long unsigned int,
      const char * , ...);
 
  void main_noparam(){
 
  }
+  void* main(){
+
+  }
 
   void main_noparam(){
 
@@ -60,6 +67,7 @@ int* main() {
     printf("len %d \n", len);
     lex_yacc_parser_deinit();
     return 0;
+    main();
     memset(&(p->param_list), ZERO, sizeof(int*));
 }
 int* main() {

@@ -206,7 +206,7 @@ void count(int not_need_record_flag)
 		else
 			column++;
     fflush(stdout);
-	//ECHO;
+	ECHO;
 }
 
 

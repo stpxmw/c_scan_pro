@@ -9,7 +9,7 @@ int main() {
     int i = 0;
     while(1) {
     lex_yacc_parser_init();
-    read_file("../test.txt");
+    read_file("./test.txt");
 
     lex_yacc_parser_deinit();
         printList(struct_link_list);
@@ -17,12 +17,12 @@ int main() {
         struct_link_list = NULL;
         i++;
         printf_all_func_ref_list(function_ref_link_list);
-        free_function_rel_list(function_ref_link_list);
-        function_ref_link_list = NULL;
-        //break;
+
+        break;
     }
 
-
+    free_function_rel_list(function_ref_link_list);
+    function_ref_link_list = NULL;
 
 
     return 0;

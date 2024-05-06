@@ -237,6 +237,10 @@ void assign__func_d_loc_to_func_d(Function_D* dest, Function_D* src)
 
 void print_params(Param_t_list *p)
 {
+    if (NULL EQ p)
+    {
+        return;
+    }
     printf("START PRINT PARAMS --> ");
     int no = p->no_param;
     int i;

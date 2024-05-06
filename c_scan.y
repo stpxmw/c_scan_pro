@@ -184,6 +184,9 @@ declaration
 	: declaration_specifiers ';'
 	{
 		Function_Pre* dummy_next_node = (Function_Pre*)RW_MALLOC(sizeof(Function_Pre) );
+		SYMBOL_INFO_T *temp_symbol_info0 = $1;
+		printf("%s****",temp_symbol_info0->symbol_name);
+		memset(dummy_next_node,0,sizeof(Function_Pre));
 		$$ = dummy_next_node;
 	}
 	| declaration_specifiers init_declarator_list ';'
@@ -225,14 +228,24 @@ declaration
 
 		} else { // this is struct or other state reduce like struct declare, we can not add all struct to it
 			Function_D *temp_symbol_info = $2;
-                        printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->fun_name );
+                        //printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->fun_name );
                         if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->fun_name) )
                         {
-				if( (strcmp(temp_symbol_info0->symbol_name, "typedef struct") == 0)
-				  ||(strcmp(temp_symbol_info0->symbol_name, "struct") == 0) ){
-					insertAtHead(&struct_link_list,temp_symbol_info->fun_name,NULL);
+				if( strstr(temp_symbol_info0->symbol_name, "typedef") NEQ NULL
+				   ){
+				   	char delims[] = "|";
+				   	char *token;
+				   	token = strtok(temp_symbol_info->fun_name,delims);
+				   	while (token != NULL) {
+				   		insertAtHead(&struct_link_list,token,NULL);
+				   		printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",token );
+				   		token = strtok(NULL, delims);
+
+				   	}
+
+					//insertAtHead(&struct_link_list,temp_symbol_info->fun_name,NULL);
 #ifdef BISON_DEBUG
-                        		printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->fun_name );
+                        		//printf("BISON_DEBUG ADD STRUCT TO LIST -->\"%s\"\n",temp_symbol_info->fun_name );
 #endif
 
 				 }
@@ -411,7 +424,14 @@ init_declarator_list
 	}
 	| init_declarator_list ',' init_declarator
 	{
-	//currently do not support
+
+	  Function_D *temp_symbol_info1 = $1;
+	  Function_D *temp_symbol_info2 = $3;
+	  strcat(temp_symbol_info1->fun_name,"|");
+          strcat(temp_symbol_info1->fun_name,temp_symbol_info2->fun_name);
+          FREE_FUNC_D_NODE($3);
+	  $$ = 	$1;
+
 	}
 
 	;
@@ -958,8 +978,11 @@ block_item
 	: declaration
 	{
 	//to do in the feature
+
 	Function_List_Node_t *fun_node = NULL;
         Function_Pre *dummy = $1;
+
+        //assert(0);
         if (NULL NEQ dummy->function_d)
         {
         	dummy->function_d->fun_type = FUN_CALL;
@@ -994,6 +1017,7 @@ iteration_statement
 	| FOR '(' expression_statement expression_statement expression ')' statement
 	| FOR '(' declaration expression_statement ')' statement
 	{
+
 		FREE_AST_NODE($3);
 	}
 	| FOR '(' declaration expression_statement expression ')' statement
@@ -1018,33 +1042,58 @@ translation_unit
 external_declaration
 	: function_definition
 	{
+		Function_Pre *dummy = $1;
+		char *bak_p = NULL;
+		char delims[] = "|";
+		char *token;
 		Function_List_Node_t *fun_node = NULL;
-		fun_node = transfer_func_to_list_node($1);
-		if (NULL NEQ fun_node)
-		{
-		 add_func_node_to_ref_list(fun_node);
+		if ( NULL NEQ dummy->function_d) {
+			bak_p = dummy->function_d->fun_name;
+			token = strtok(dummy->function_d->fun_name,delims);
+			while (token != NULL) {
+				dummy->function_d->fun_name = token;
+				fun_node = transfer_func_to_list_node(dummy);
+				if (NULL NEQ fun_node)
+				{
+					add_func_node_to_ref_list(fun_node);
+				}
+				else {
+					free_func_node_t(fun_node);
+				}
+				token = strtok(NULL, delims);
+			}
+			dummy->function_d->fun_name = bak_p;
 		}
-		 else {
-                 			free_func_node_t(fun_node);
-                 		}
 		$$ = $1;
-		FREE_AST_NODE($1);
+		FREE_AST_NODE(dummy);
 	}
 	| declaration
 	{
-		Function_List_Node_t *fun_node = NULL;
 		Function_Pre *dummy = $1;
-		fun_node = transfer_func_to_list_node($1);
-		if (NULL NEQ fun_node)
-		{
-                 add_func_node_to_ref_list(fun_node);
-		} else {
-			free_func_node_t(fun_node);
-		}
+		char *bak_p = NULL;
+		Function_List_Node_t *fun_node = NULL;
+		char delims[] = "|";
+                char *token;
 
-		//assert(0);
+		if (NULL NEQ dummy->function_d) {
+			bak_p = dummy->function_d->fun_name;
+			token = strtok(dummy->function_d->fun_name,delims);
+			while (token != NULL) {
+				dummy->function_d->fun_name = token;
+				fun_node = transfer_func_to_list_node(dummy);
+				if (NULL NEQ fun_node)
+				{
+					add_func_node_to_ref_list(fun_node);
+				}
+				else {
+					free_func_node_t(fun_node);
+				}
+				token = strtok(NULL, delims);
+			}
+			dummy->function_d->fun_name = bak_p;
+		}
 		$$ = $1;
-		FREE_AST_NODE($1);
+		FREE_AST_NODE(dummy);
 	}
 	;
 
@@ -1106,11 +1155,10 @@ function_definition
 		//this will not reach
 		assert(0);
 		Function_D *temp_symbol_info = $2;
-		printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->fun_name );
+		//printf("STRUCT OR UNION NAME--> \"%s\"\n",temp_symbol_info->fun_name );
 		if ((NULL NEQ temp_symbol_info) && (NULL NEQ temp_symbol_info->fun_name) )
 		{
-			if( (strcmp(temp_symbol_info0->symbol_name, "typedef struct") == 0)
-			  ||(strcmp(temp_symbol_info0->symbol_name, "struct") == 0) ){
+			if( strstr(temp_symbol_info0->symbol_name, "typedef") NEQ NULL){
 
 				insertAtHead(&struct_link_list,temp_symbol_info->fun_name,NULL);
 #ifdef BISON_DEBUG
